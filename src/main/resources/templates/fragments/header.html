@@ -1,0 +1,128 @@
+<th:block th:fragment="header">
+    <style>
+        #home:hover #lv1-menu {
+            display: block !important;
+        }
+
+        #lv1-menu .lv1-item:hover #lv2-menu {
+            display: block !important;
+        }
+
+        .lv2-btn {
+            outline: none !important;
+        }
+
+        .arrow-sign {
+            cursor: pointer;
+        }
+    </style>
+
+    <header class="p-3 border-bottom">
+        <div class="container">
+            <div class="d-flex flex-wrap align-items-center justify-content-center">
+                <a href="/" class="d-flex align-items-center mb-lg-0 link-body-emphasis text-decoration-none me-2 fs-3">
+                    <!-- <i class="fa-solid fa-book"></i> -->
+                    <img style="width: 38px" th:src="@{favicon.png}" alt="Book icon" />
+                </a>
+
+                <ul class="nav nav-pills col-auto me-auto justify-content-center mb-md-0 fw-bold">
+                    <li class="nav-item" id="home">
+                        <a href="/" class="nav-link px-2 link-body-emphasis">
+                            Home
+                        </a>
+                        <ul class="dropdown-menu" id="lv1-menu">
+                            <li class="dropdown-item py-1 px-0">
+                                <div class="btn-group dropend w-100">
+                                    <div class="flex-fill py-0 px-3 text-start fw-normal">Genre</div>
+                                    <div class="arrow-sign dropdown-toggle dropdown-toggle-split py-0 px-3 text-end"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                        <span class="visually-hidden">Toggle Dropend</span>
+                                    </div>
+                                    <ul class="dropdown-menu">
+                                        <!-- loop genres list -->
+                                        <li>
+                                            <a class="dropdown-item" th:href="@{?genre=genre.id}">
+                                                Romantic
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" th:href="@{?genre=genre.id}">
+                                                Action & Adventure
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" th:href="@{?genre=genre.id}">
+                                                Fiction
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a th:href="@{/customer/orders}" class="nav-link px-2 link-secondary">Order</a>
+                    </li>
+                    <li class="nav-item">
+                        <a th:href="@{/customer/cart}" class="nav-link px-2 link-body-emphasis position-relative">
+                            <i class="fa-solid fa-cart-shopping"></i>
+                            <span
+                                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                2
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="form-check form-switch mb-0 me-4">
+                    <input class="form-check-input" type="checkbox" role="switch" id="darkMode" checked />
+                    <label class="form-check-label" for="darkMode">
+                        <i id="dark-mode-icon" class="fa-solid fa-moon fa-lg"></i>
+                        <!-- <i id="dark-mode-icon" class="fa-solid fa-sun fa-lg"></i> -->
+                    </label>
+                </div>
+
+                <div class="dropdown text-end">
+                    <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <img th:src="@{/images/users/avatars/1e24734f-33d0-4923-bf6f-e8a18b918b2d.png}" alt="avatar"
+                            width="32" height="32" class="rounded-circle" />
+                    </a>
+                    <ul class="dropdown-menu text-small">
+                        <li>
+                            <a class="dropdown-item" href="/customer/orders">
+                                <span style="width: 20px" class="d-inline-flex justify-content-center me-2">
+                                    <i class="fa-solid fa-table"></i></span>Orders</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="/customer/cart"><span style="width: 20px"
+                                    class="d-inline-flex justify-content-center me-2"><i
+                                        class="fa-solid fa-cart-shopping"></i></span>Cart
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="/customer/profile"><span style="width: 20px"
+                                    class="d-inline-flex justify-content-center me-2"><i
+                                        class="fa-solid fa-user"></i></span>Profile</a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider" />
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="/auth/logout">
+                                <span style="width: 20px" class="d-inline-flex justify-content-center me-2">
+                                    <i class="fa-solid fa-right-from-bracket"></i></span>Sign out
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- <div>
+                    <a class="btn btn-outline-primary" href="/auth/login">Login</a>
+                    <a class="btn btn-primary" href="/auth/signup">Sign-up</a>
+                </div> -->
+
+            </div>
+        </div>
+    </header>
+</th:block>

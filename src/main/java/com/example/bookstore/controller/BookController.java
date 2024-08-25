@@ -11,4 +11,14 @@ public class BookController {
     public String getHomePage() {
         return "index";
     }
+
+    @GetMapping("/test")
+    public String getHomePage1() {
+        return "index";
+    }
+
+    @GetMapping("/admin/test")
+    public String getHomePage3() {
+        return "index";
+    }
 }

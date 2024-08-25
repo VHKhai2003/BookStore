@@ -22,7 +22,7 @@
             <div class="d-flex flex-wrap align-items-center justify-content-center">
                 <a href="/" class="d-flex align-items-center mb-lg-0 link-body-emphasis text-decoration-none me-2 fs-3">
                     <!-- <i class="fa-solid fa-book"></i> -->
-                    <img style="width: 38px" th:src="@{favicon.png}" alt="Book icon" />
+                    <img style="width: 38px" th:src="@{/favicon.png}" alt="Book icon" />
                 </a>
 
                 <ul class="nav nav-pills col-auto me-auto justify-content-center mb-md-0 fw-bold">
@@ -82,7 +82,7 @@
                     </label>
                 </div>
 
-                <div class="dropdown text-end">
+                <div th:if="${#authentication.name != 'anonymousUser'}" class="dropdown text-end">
                     <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle"
                         data-bs-toggle="dropdown" aria-expanded="false">
                         <img th:src="@{/images/users/avatars/1e24734f-33d0-4923-bf6f-e8a18b918b2d.png}" alt="avatar"
@@ -109,20 +109,27 @@
                             <hr class="dropdown-divider" />
                         </li>
                         <li>
-                            <a class="dropdown-item" href="/auth/logout">
+                            <a id="logout" class="dropdown-item" href="#">
                                 <span style="width: 20px" class="d-inline-flex justify-content-center me-2">
-                                    <i class="fa-solid fa-right-from-bracket"></i></span>Sign out
+                                    <i class="fa-solid fa-right-from-bracket"></i></span>Logout
                             </a>
+                            <form th:action="@{/auth/logout}" method="post" class="d-none" id="logout-form"></form>
                         </li>
                     </ul>
                 </div>
 
-                <!-- <div>
-                    <a class="btn btn-outline-primary" href="/auth/login">Login</a>
-                    <a class="btn btn-primary" href="/auth/signup">Sign-up</a>
-                </div> -->
+                <div th:if="${#authentication.name == 'anonymousUser'}">
+                    <a class=" btn btn-outline-primary" th:href="@{/auth/login}">Login</a>
+                    <a class="btn btn-primary" th:href="@{/auth/register}">Register</a>
+                </div>
 
             </div>
         </div>
     </header>
+    <script>
+        $('#logout').click(e => {
+            e.preventDefault();
+            $("#logout-form").submit();
+        })
+    </script>
 </th:block>

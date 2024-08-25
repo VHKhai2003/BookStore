@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <th:block th:replace="fragments/cdn :: bootstrap-fontawesome-jquery"></th:block>
-    <title>Home</title>
+    <th:block th:replace="~{fragments/cdn :: bootstrap-fontawesome-jquery}"></th:block>
+    <title>BookStore</title>
     <style>
         .line-clamp {
             display: -webkit-box;
@@ -16,8 +16,8 @@
     </style>
 </head>
 
-<body style="padding: 10px;">
-    <div th:replace="fragments/header :: header"></div>
+<body>
+    <div th:replace="~{fragments/header :: header}"></div>
 
     <main>
         <div class="py-2 bg-body-secondary">
@@ -308,7 +308,7 @@
         </div>
     </main>
 
-    <div th:replace="fragments/footer :: footer"></div>
+    <div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 
 </html>

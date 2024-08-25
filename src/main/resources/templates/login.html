@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <th:block th:replace="~{fragments/cdn :: bootstrap-fontawesome-jquery}"></th:block>
+    <title>BookStore</title>
+</head>
+
+<body>
+    <div th:replace="~{fragments/header :: header}"></div>
+
+    <main class="bg-body-secondary">
+        <div class="container py-2">
+            <div class="row justify-content-center align-items-center my-3">
+                <div class="col-12 col-md-9 col-lg-6 col-xl-5">
+                    <form th:action="@{/auth/login}" method="post" class="text-body-emphasis p-4 rounded-4 shadow card">
+                        <h1 class="text-center text-primary mb-2 text-uppercase">Login</h1>
+                        <!-- Login fail -->
+                        <p id="notification" class="text-danger text-center mb-1" style="visibility: hidden;">
+                            <i>Incorrect username or password</i>
+                        </p>
+
+                        <div class="form-group">
+                            <label class="form-label" for="input-username">Username</label>
+                            <input type="text" class="form-control" id="input-username" name="username"
+                                placeholder="Enter username" required />
+                        </div>
+                        <div class="form-group mt-3">
+                            <label class="form-label" for="input-password">Password</label>
+                            <input type="password" class="form-control" id="input-password" name="password"
+                                placeholder="Enter password" required />
+                        </div>
+
+                        <button type="submit" class="d-block mx-auto btn btn-primary col-12 mt-3 mb-2 px-4 py-2">
+                            Login
+                        </button>
+                        <p class="text-center mb-0">
+                            You don't have an account?
+                            <a th:href="@{/auth/register}" class="text-primary">Register</a> now.
+                        </p>
+
+                        <div class="divider d-flex align-items-center my-3">
+                            <p class="mb-0 flex-grow-1 ms-2" style="height: 1px; background-color: #eee"></p>
+                            <p class="text-center fw-bold mx-3 mb-0 text-muted">OR</p>
+                            <p class="mb-0 flex-grow-1 me-2" style="height: 1px; background-color: #eee"></p>
+                        </div>
+
+                        <div class="d-flex justify-content-center mb-2">
+                            <a class="btn btn-danger px-4 py-2 col-12" href="#" role="button">
+                                <i class="fab fa-google me-2"></i>Continue with Google
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+    <script th:if="${message != null}" th:inline="javascript">
+        let message = /*[[${message}]]*/ '';
+        toastr.options.timeOut = 5000;
+        toastr.success(message);
+    </script>
+
+    <script th:if="${param.error != null}" th:inline="javascript">
+        $('#notification').css('visibility', 'visible');
+        $('#input-username').on('input', (e) => {
+            $('#notification').css('visibility', 'hidden');
+        });
+        $('#input-password').on('input', (e) => {
+            $('#notification').css('visibility', 'hidden');
+        });
+    </script>
+
+</body>
+
+</html>

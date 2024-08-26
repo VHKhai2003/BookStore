@@ -40,19 +40,9 @@
                                     </div>
                                     <ul class="dropdown-menu">
                                         <!-- loop genres list -->
-                                        <li>
-                                            <a class="dropdown-item" th:href="@{?genre=genre.id}">
-                                                Romantic
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item" th:href="@{?genre=genre.id}">
-                                                Action & Adventure
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item" th:href="@{?genre=genre.id}">
-                                                Fiction
+                                        <li th:each="genre : ${genres}">
+                                            <a th:text="${genre.name}" class="dropdown-item"
+                                                th:href="@{/(genre=${genre.id})}">
                                             </a>
                                         </li>
                                     </ul>

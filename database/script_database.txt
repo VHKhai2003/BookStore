@@ -362,5 +362,5 @@ alter table books add status text;
 update books set status = 'active';
 
 
-
+alter table books alter column price type float;
 

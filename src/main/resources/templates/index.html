@@ -23,247 +23,52 @@
         <div class="py-2 bg-body-secondary">
             <form id="search-form" class="container d-flex flex-wrap align-items-center py-3">
                 <div class="col-12 col-sm-auto mb-2 mb-sm-0 me-sm-auto" role="search">
-                    <input type="search" name="keyword" class="form-control" placeholder="Search..."
-                        aria-label="Search" />
+                    <input type="search" name="keyword" class="form-control" placeholder="Search..." aria-label="Search"
+                        th:value="${param.keyword}" />
                 </div>
 
                 <div class="d-flex align-items-center">
                     <select class="form-select" name="genre" id="genre">
-                        <option selected value="all">All</option>
-                        <option value="genre.id">Action & Adventure</option>
-                        <option value="genre.id">Action & Adventure</option>
-                        <option value="genre.id">Action & Adventure</option>
+                        <option value="all">All</option>
+                        <option th:each="genre : ${genres}" th:value="${genre.id}" th:text="${genre.name}"
+                            th:selected="${param.genre != null and param.genre.toString() == genre.id.toString()}">
+                        </option>
                     </select>
                 </div>
             </form>
 
             <div class="container">
-                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-3">
+                <div th:object="${booksData}"
+                    class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-3">
 
-                    <div class="col">
-                        <a href="/customer/detail/bookid"
+                    <div th:each="book : *{content}" class="col">
+                        <a th:href="@{/book/{id}(id=${book.id})}"
                             class="card border-0 p-2 shadow border-top border-5 border-secondary rounded text-decoration-none"
                             title="View detail">
-                            <img src="/images/products/back-cover/fca8c31f-ab90-423b-92fb-40739046961a.jpg"
-                                class="card-img-top rounded" style="aspect-ratio: 9 / 10" />
+                            <img th:src="@{${book.frontCoverImage}}" class="card-img-top rounded"
+                                style="aspect-ratio: 9 / 10" />
 
                             <div class="card-body p-1 pb-1">
                                 <div class="">
-                                    <p class="card-title h5 text-body-emphasis opacity-75 text-uppercase text-center text-truncate"
+                                    <p th:text="${book.title}"
+                                        class="card-title h5 text-body-emphasis opacity-75 text-uppercase text-center text-truncate"
                                         title="Title of the book">
-                                        Title of the book
                                     </p>
                                     <p class="card-title text-success text-uppercase text-center text-truncate"
                                         title="Author of the book">
-                                        <b>Author:</b> Author of the book
+                                        <b th:text="'Author: ' + ${book.author}"></b>
                                     </p>
                                 </div>
-                                <p class="card-text mb-2 line-clamp">book's description</p>
+                                <p class="card-text mb-2 line-clamp" th:text="${book.description}">/p>
                                 <div class="d-flex justify-content-end align-items-center fs-6">
                                     <p class="mb-0">
-                                        <b class="text-success">Price:</b> 50
+                                        <b th:text="'Price: ' + ${book.price}" class="text-success"></b>
                                     </p>
                                 </div>
                             </div>
                         </a>
                     </div>
 
-                    <div class="col">
-                        <a href="/customer/detail/bookid"
-                            class="card border-0 p-2 shadow border-top border-5 border-secondary rounded text-decoration-none"
-                            title="View detail">
-                            <img src="/images/products/back-cover/fca8c31f-ab90-423b-92fb-40739046961a.jpg"
-                                class="card-img-top rounded" style="aspect-ratio: 9 / 10" />
-
-                            <div class="card-body p-1 pb-1">
-                                <div class="">
-                                    <p class="card-title h5 text-body-emphasis opacity-75 text-uppercase text-center text-truncate"
-                                        title="Title of the book">
-                                        Title of the book
-                                    </p>
-                                    <p class="card-title text-success text-uppercase text-center text-truncate"
-                                        title="Author of the book">
-                                        <b>Author:</b> Author of the book
-                                    </p>
-                                </div>
-                                <p class="card-text mb-2 line-clamp">book's description</p>
-                                <div class="d-flex justify-content-end align-items-center fs-6">
-                                    <p class="mb-0">
-                                        <b class="text-success">Price:</b> 50
-                                    </p>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-
-                    <div class="col">
-                        <a href="/customer/detail/bookid"
-                            class="card border-0 p-2 shadow border-top border-5 border-secondary rounded text-decoration-none"
-                            title="View detail">
-                            <img src="/images/products/back-cover/fca8c31f-ab90-423b-92fb-40739046961a.jpg"
-                                class="card-img-top rounded" style="aspect-ratio: 9 / 10" />
-
-                            <div class="card-body p-1 pb-1">
-                                <div class="">
-                                    <p class="card-title h5 text-body-emphasis opacity-75 text-uppercase text-center text-truncate"
-                                        title="Title of the book">
-                                        Title of the book
-                                    </p>
-                                    <p class="card-title text-success text-uppercase text-center text-truncate"
-                                        title="Author of the book">
-                                        <b>Author:</b> Author of the book
-                                    </p>
-                                </div>
-                                <p class="card-text mb-2 line-clamp">book's description</p>
-                                <div class="d-flex justify-content-end align-items-center fs-6">
-                                    <p class="mb-0">
-                                        <b class="text-success">Price:</b> 50
-                                    </p>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-
-                    <div class="col">
-                        <a href="/customer/detail/bookid"
-                            class="card border-0 p-2 shadow border-top border-5 border-secondary rounded text-decoration-none"
-                            title="View detail">
-                            <img src="/images/products/back-cover/fca8c31f-ab90-423b-92fb-40739046961a.jpg"
-                                class="card-img-top rounded" style="aspect-ratio: 9 / 10" />
-
-                            <div class="card-body p-1 pb-1">
-                                <div class="">
-                                    <p class="card-title h5 text-body-emphasis opacity-75 text-uppercase text-center text-truncate"
-                                        title="Title of the book">
-                                        Title of the book
-                                    </p>
-                                    <p class="card-title text-success text-uppercase text-center text-truncate"
-                                        title="Author of the book">
-                                        <b>Author:</b> Author of the book
-                                    </p>
-                                </div>
-                                <p class="card-text mb-2 line-clamp">book's description</p>
-                                <div class="d-flex justify-content-end align-items-center fs-6">
-                                    <p class="mb-0">
-                                        <b class="text-success">Price:</b> 50
-                                    </p>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-
-
-                    <div class="col">
-                        <a href="/customer/detail/bookid"
-                            class="card border-0 p-2 shadow border-top border-5 border-secondary rounded text-decoration-none"
-                            title="View detail">
-                            <img src="/images/products/back-cover/fca8c31f-ab90-423b-92fb-40739046961a.jpg"
-                                class="card-img-top rounded" style="aspect-ratio: 9 / 10" />
-
-                            <div class="card-body p-1 pb-1">
-                                <div class="">
-                                    <p class="card-title h5 text-body-emphasis opacity-75 text-uppercase text-center text-truncate"
-                                        title="Title of the book">
-                                        Title of the book
-                                    </p>
-                                    <p class="card-title text-success text-uppercase text-center text-truncate"
-                                        title="Author of the book">
-                                        <b>Author:</b> Author of the book
-                                    </p>
-                                </div>
-                                <p class="card-text mb-2 line-clamp">book's description</p>
-                                <div class="d-flex justify-content-end align-items-center fs-6">
-                                    <p class="mb-0">
-                                        <b class="text-success">Price:</b> 50
-                                    </p>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-
-                    <div class="col">
-                        <a href="/customer/detail/bookid"
-                            class="card border-0 p-2 shadow border-top border-5 border-secondary rounded text-decoration-none"
-                            title="View detail">
-                            <img src="/images/products/back-cover/fca8c31f-ab90-423b-92fb-40739046961a.jpg"
-                                class="card-img-top rounded" style="aspect-ratio: 9 / 10" />
-
-                            <div class="card-body p-1 pb-1">
-                                <div class="">
-                                    <p class="card-title h5 text-body-emphasis opacity-75 text-uppercase text-center text-truncate"
-                                        title="Title of the book">
-                                        Title of the book
-                                    </p>
-                                    <p class="card-title text-success text-uppercase text-center text-truncate"
-                                        title="Author of the book">
-                                        <b>Author:</b> Author of the book
-                                    </p>
-                                </div>
-                                <p class="card-text mb-2 line-clamp">book's description</p>
-                                <div class="d-flex justify-content-end align-items-center fs-6">
-                                    <p class="mb-0">
-                                        <b class="text-success">Price:</b> 50
-                                    </p>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-
-                    <div class="col">
-                        <a href="/customer/detail/bookid"
-                            class="card border-0 p-2 shadow border-top border-5 border-secondary rounded text-decoration-none"
-                            title="View detail">
-                            <img src="/images/products/back-cover/fca8c31f-ab90-423b-92fb-40739046961a.jpg"
-                                class="card-img-top rounded" style="aspect-ratio: 9 / 10" />
-
-                            <div class="card-body p-1 pb-1">
-                                <div class="">
-                                    <p class="card-title h5 text-body-emphasis opacity-75 text-uppercase text-center text-truncate"
-                                        title="Title of the book">
-                                        Title of the book
-                                    </p>
-                                    <p class="card-title text-success text-uppercase text-center text-truncate"
-                                        title="Author of the book">
-                                        <b>Author:</b> Author of the book
-                                    </p>
-                                </div>
-                                <p class="card-text mb-2 line-clamp">book's description</p>
-                                <div class="d-flex justify-content-end align-items-center fs-6">
-                                    <p class="mb-0">
-                                        <b class="text-success">Price:</b> 50
-                                    </p>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-
-                    <div class="col">
-                        <a href="/customer/detail/bookid"
-                            class="card border-0 p-2 shadow border-top border-5 border-secondary rounded text-decoration-none"
-                            title="View detail">
-                            <img src="/images/products/back-cover/fca8c31f-ab90-423b-92fb-40739046961a.jpg"
-                                class="card-img-top rounded" style="aspect-ratio: 9 / 10" />
-
-                            <div class="card-body p-1 pb-1">
-                                <div class="">
-                                    <p class="card-title h5 text-body-emphasis opacity-75 text-uppercase text-center text-truncate"
-                                        title="Title of the book">
-                                        Title of the book
-                                    </p>
-                                    <p class="card-title text-success text-uppercase text-center text-truncate"
-                                        title="Author of the book">
-                                        <b>Author:</b> Author of the book
-                                    </p>
-                                </div>
-                                <p class="card-text mb-2 line-clamp">book's description</p>
-                                <div class="d-flex justify-content-end align-items-center fs-6">
-                                    <p class="mb-0">
-                                        <b class="text-success">Price:</b> 50
-                                    </p>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
 
                 </div>
 
@@ -280,16 +85,10 @@
                             </a>
                         </li>
 
-                        <li class="page-item active">
-                            <a page-value="1" class="page-link" href="#">1</a>
-                        </li>
 
-                        <li class="page-item">
-                            <a page-value="2" class="page-link" href="#">2</a>
-                        </li>
-
-                        <li class="page-item">
-                            <a page-value="3" class="page-link" href="#">3</a>
+                        <li th:each="i : ${#numbers.sequence(1, booksData.totalPages)}" class="page-item"
+                            th:classappend="${i == booksData.number} ? ' active' : ''">
+                            <a th:attr="page-value=${i}" class="page-link" href="#" th:text="${i}"></a>
                         </li>
 
                         <li class="page-item next">
@@ -309,6 +108,88 @@
     </main>
 
     <div th:replace="~{fragments/footer :: footer}"></div>
+
+    <script th:inline="javascript">
+        $(() => {
+            // Search and filter
+            $('#genre').change((e) => {
+                $('#search-form').submit();
+            });
+
+            // Pagination
+            $('.page-item:not(.prev):not(.next):not(.active):not(.first):not(.last):not(.dots)').click(e => {
+                e.preventDefault();
+                e.stopPropagation();
+
+                const currentUrl = new URL(window.location.href);
+                currentUrl.searchParams.delete('page')
+                currentUrl.searchParams.set('page', $(e.target).attr('page-value'));
+
+                window.location.href = currentUrl.toString();
+            })
+
+            $('.page-item.active').click(e => {
+                e.preventDefault();
+                e.stopPropagation();
+            })
+
+            $('.page-item.dots').click(e => {
+                e.preventDefault();
+                e.stopPropagation();
+            })
+
+            $('.page-item.prev').click(e => {
+                e.preventDefault();
+                e.stopPropagation();
+                const currentPage = Number.parseInt(/*[[${booksData.number}]]*/ '');
+                if (currentPage !== 1) {
+                    const currentUrl = new URL(window.location.href);
+                    currentUrl.searchParams.delete('page')
+                    currentUrl.searchParams.set('page', currentPage - 1);
+                    window.location.href = currentUrl.toString();
+                }
+            })
+
+            $('.page-item.next').click(e => {
+                e.preventDefault();
+                e.stopPropagation();
+                const currentPage = Number.parseInt(/*[[${booksData.number}]]*/ '');
+                const totalPage = Number.parseInt(/*[[${booksData.totalPages}]]*/ '');
+                if (currentPage !== totalPage) {
+                    const currentUrl = new URL(window.location.href);
+                    currentUrl.searchParams.delete('page')
+                    currentUrl.searchParams.set('page', currentPage + 1);
+                    window.location.href = currentUrl.toString();
+                }
+            })
+
+            $('.page-item.first').click(e => {
+                e.preventDefault();
+                e.stopPropagation();
+                const currentPage = Number.parseInt(/*[[${booksData.number}]]*/ '');
+                if (currentPage !== 1) {
+                    const currentUrl = new URL(window.location.href);
+                    currentUrl.searchParams.delete('page')
+                    currentUrl.searchParams.set('page', 1);
+                    window.location.href = currentUrl.toString();
+                }
+            })
+
+            $('.page-item.last').click(e => {
+                e.preventDefault();
+                e.stopPropagation();
+                const currentPage = Number.parseInt(/*[[${booksData.number}]]*/ '');
+                const totalPage = Number.parseInt(/*[[${booksData.totalPages}]]*/ '');
+
+                if (currentPage !== totalPage) {
+                    const currentUrl = new URL(window.location.href);
+                    currentUrl.searchParams.delete('page')
+                    currentUrl.searchParams.set('page', totalPage);
+                    window.location.href = currentUrl.toString();
+                }
+            })
+        });
+    </script>
 </body>
 
 </html>

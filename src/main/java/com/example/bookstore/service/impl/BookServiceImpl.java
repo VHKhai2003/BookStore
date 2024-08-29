@@ -35,4 +35,10 @@ public class BookServiceImpl implements BookService {
                 data.getNumberOfElements(), data.getContent());
     }
 
+    @Override
+    public Book getBookInfo(UUID id) {
+        Book book = bookRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Book not found"));
+        return book;
+    }
+
 }

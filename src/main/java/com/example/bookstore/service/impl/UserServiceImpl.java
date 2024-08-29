@@ -1,9 +1,11 @@
 package com.example.bookstore.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.example.bookstore.dto.UserDto;
 import com.example.bookstore.dto.UserRegisterDto;
 import com.example.bookstore.model.Role;
 import com.example.bookstore.model.User;
@@ -34,6 +36,25 @@ public class UserServiceImpl implements UserService {
                 .status("active")
                 .build();
         userRepository.save(user);
+    }
+
+    @Override
+    public UserDto getUserInfoByUsername(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException(username + " not found"));
+        UserDto userDto = UserDto.builder()
+                .id(user.getId())
+                .username(username)
+                .name(user.getName())
+                .email(user.getEmail())
+                .address(user.getAddress())
+                .avatar(user.getAvatar())
+                .accountNumber(user.getAccountNumber())
+                .phoneNumber(user.getPhoneNumber())
+                .role(user.getRole().getName())
+                .status(user.getStatus())
+                .build();
+        return userDto;
     }
 
 }

@@ -1,12 +1,12 @@
 package com.example.bookstore.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.bookstore.dto.UserDto;
 import com.example.bookstore.dto.UserRegisterDto;
+import com.example.bookstore.exception.CustomException;
 import com.example.bookstore.model.Role;
 import com.example.bookstore.model.User;
 import com.example.bookstore.repository.UserRepository;
@@ -23,7 +23,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void addUser(UserRegisterDto userRegisterDto) {
         if (userRepository.findByUsername(userRegisterDto.getUsername()).isPresent()) {
-            throw new IllegalArgumentException("Username existed");
+            throw new CustomException(400, "Username existed");
         }
 
         User user = User.builder()
@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto getUserInfoByUsername(String username) {
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException(username + " not found"));
+                .orElseThrow(() -> new CustomException(404, username + " not found"));
         UserDto userDto = UserDto.builder()
                 .id(user.getId())
                 .username(username)

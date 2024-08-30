@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.bookstore.dto.PaginationDto;
+import com.example.bookstore.exception.CustomException;
 import com.example.bookstore.model.Book;
 import com.example.bookstore.model.Genre;
 import com.example.bookstore.repository.BookRepository;
@@ -37,7 +38,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book getBookInfo(UUID id) {
-        Book book = bookRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Book not found"));
+        Book book = bookRepository.findById(id).orElseThrow(() -> new CustomException(404, "Book not found"));
         return book;
     }
 

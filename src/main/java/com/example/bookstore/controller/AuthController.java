@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.bookstore.dto.UserRegisterDto;
+import com.example.bookstore.exception.CustomException;
 import com.example.bookstore.service.UserService;
 
 import jakarta.servlet.http.HttpSession;
@@ -40,7 +41,7 @@ public class AuthController {
         try {
             userService.addUser(userRegisterDto);
             session.setAttribute("message", "Register successfully, login with your new account");
-        } catch (IllegalArgumentException e) {
+        } catch (CustomException e) {
             session.setAttribute("message", e.getMessage());
             session.setAttribute("registerInfo", userRegisterDto);
             return "redirect:/auth/register";

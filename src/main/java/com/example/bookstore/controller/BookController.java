@@ -2,23 +2,28 @@ package com.example.bookstore.controller;
 
 import java.util.UUID;
 
-import javax.management.RuntimeErrorException;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.bookstore.dto.CartDto;
+import com.example.bookstore.dto.UserDto;
 import com.example.bookstore.model.Book;
 import com.example.bookstore.service.BookService;
+import com.example.bookstore.service.CartService;
 
 @Controller
 public class BookController {
 
     @Autowired
     private BookService bookService;
+
+    @Autowired
+    private CartService cartService;
 
     @GetMapping("/")
     public String getHomePage(Model model, @RequestParam(defaultValue = "") String keyword,
@@ -29,10 +34,20 @@ public class BookController {
     }
 
     @GetMapping("/book/{id}")
-    public String getBookInfo(Model model, @PathVariable UUID id) {
+    public String getBookInfo(Model model, @PathVariable UUID id, Authentication authentication) {
         Book book = bookService.getBookInfo(id);
         model.addAttribute("book", book);
         model.addAttribute("relatedBooks", book.getGenre().getBooks());
+
+        // check in user's cart
+        if (authentication.isAuthenticated()) {
+            UserDto loginUser = (UserDto) model.getAttribute("loginUser");
+            CartDto cartDto = cartService.getCartOfUserAndBook(loginUser.getId(), id);
+            if (cartDto != null) {
+                model.addAttribute("cartQuantity", cartDto.getQuantity());
+            }
+        }
+
         return "book";
     }
 }

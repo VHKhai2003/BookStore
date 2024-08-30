@@ -179,8 +179,9 @@
 
                                                     <input th:min="${book.stockQuantity > 0 ? 1 : 0}"
                                                         th:max="${book.stockQuantity}"
+                                                        th:value="${cartQuantity != null ? cartQuantity : 1}"
                                                         class="form-control text-center border-success border-start-0"
-                                                        name="quantity" value="1" type="number" id="input-quantity" />
+                                                        name="quantity" type="number" id="input-quantity" />
 
                                                     <span class="btn btn-outline-success px-3 input-group-text"
                                                         onclick="this.parentNode.querySelector('input[type=number]').stepUp()">

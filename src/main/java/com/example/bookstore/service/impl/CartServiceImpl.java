@@ -1,5 +1,6 @@
 package com.example.bookstore.service.impl;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,6 +83,19 @@ public class CartServiceImpl implements CartService {
         // insert if not exist and update if exist
         cartRepository.save(cart);
         return true;
+    }
+
+    @Override
+    public List<CartDto> getCartOfUser(UUID userId) {
+        List<Cart> carts = cartRepository.findByUser(User.builder().id(userId).build());
+        List<CartDto> cartDtos = carts.stream().map((cart) -> {
+            CartDto cartDto = CartDto.builder()
+                    .book(cart.getBook())
+                    .quantity(cart.getQuantity())
+                    .build();
+            return cartDto;
+        }).toList();
+        return cartDtos;
     }
 
 }

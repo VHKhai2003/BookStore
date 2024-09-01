@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <th:block th:replace="~{fragments/cdn :: bootstrap-fontawesome-jquery}"></th:block>
+    <title>BookStore</title>
+</head>
+
+<body>
+    <div th:replace="~{fragments/header :: header}"></div>
+
+    <main>
+        <div class="py-2 bg-body-secondary">
+            <div class="container">
+                <div class="card shadow border-0 my-3">
+                    <div class="card-header text-bg-dark py-2">
+                        <div class="row px-4 align-items-center">
+                            <div class="col-6">
+                                <h5 class="text-white text-uppercase mb-0 py-3">
+                                    <i class="fa-solid fa-cart-shopping"></i>
+                                    <span class="ms-2">Shopping Cart</span>
+                                </h5>
+                            </div>
+                            <div class="col-6 text-end">
+                                <a class="btn btn-outline-danger" th:href="@{/}">
+                                    Continue shopping
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body pb-0">
+                        <div class="container" style="min-height: 360px">
+
+                            <div th:if="${not #lists.isEmpty(cartInfo)}" class="row justify-content-center">
+                                <div class="col-10">
+                                    <div th:each="item : ${cartInfo}" class="row border-bottom py-3">
+                                        <div class="col-3 col-lg-2 ps-0 text-center">
+                                            <img th:src="@{${item.book.frontCoverImage}}" class="rounded border w-100"
+                                                style="aspect-ratio: 8 / 11; object-fit: cover" />
+                                        </div>
+                                        <div class="col-9 col-lg-6 pe-0">
+                                            <h5 class="text-uppercase text-secondary text-truncate fs-5"
+                                                style="font-size: 12px" th:text="${item.book.title}">
+                                            </h5>
+                                            <p class="text-secondary mb-0">
+                                                <span class="fw-semibold text-success"
+                                                    th:text="${'Author: ' + item.book.author}"></span>
+                                            </p>
+                                            <p class="text-secondary">
+                                                <span class="fw-semibold text-warning"
+                                                    th:text="${'Genre: ' + item.book.genre.name}"></span>
+                                            </p>
+                                        </div>
+                                        <div
+                                            class="col-12 pt-3 pt-lg-0 col-lg-4 text-center row g-0 align-items-center">
+                                            <div class="col-4">
+                                                <h6 class="fw-semibold d-flex mb-0 py-2">
+                                                    <span th:text="${item.book.price}"></span>
+                                                    <span>&nbsp;x&nbsp;</span>
+                                                    <span th:text="${item.quantity}"></span>
+                                                </h6>
+                                            </div>
+
+                                            <div class="col-6 col-lg-6">
+                                                <div class="w-75 btn-group">
+                                                    <a class="btn btn-outline-success py-2" href="#">
+                                                        <i class="fas fa-minus"></i>
+                                                    </a>
+                                                    &nbsp;&nbsp;&nbsp;
+                                                    <a class="btn btn-outline-success py-2" href="#">
+                                                        <i class="fas fa-plus"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-2 text-end">
+                                                <a class="btn btn-danger py-2" href="#">
+                                                    <i class="fa-solid fa-trash-can"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <!-- empty cart -->
+                            <div th:if="${#lists.isEmpty(cartInfo)}" style="min-height: 360px"
+                                class="d-flex justify-content-center align-items-center">
+                                <h4 class="text-danger fst-italic mb-0">
+                                    Your cart is empty now!
+                                </h4>
+                                <a th:href="@{/}" class="btn btn-warning text-light ms-2">
+                                    <i class="fa-solid fa-house"></i> Home
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- summary -->
+                    <div class="card-footer">
+                        <div class="row justify-content-center g-0">
+                            <div class="col-10">
+                                <div class="row align-items-center g-0">
+                                    <div class="col-12 col-md-8 col-lg-9 pt-2 mb-2">
+                                        <div class="d-flex align-items-center">
+                                            <h5 class="text-uppercase text-secondary">
+                                                Total:
+                                            </h5>
+                                            &nbsp;&nbsp;&nbsp;
+                                            <h4 id="total"></h4>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-4 col-lg-3">
+                                        <a class="btn btn-primary form-control" th:href="@{/cart/summary}">
+                                            Summary
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+    <script th:inline="javascript">
+        const carts = /*[[${cartInfo}]]*/ '';
+        let total = carts.reduce((prevVal, item) => prevVal + item.quantity * item.book.price, 0);
+        $('#total').html('$ ' + total.toFixed(2));
+    </script>
+</body>
+
+</html>

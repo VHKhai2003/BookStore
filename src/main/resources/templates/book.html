@@ -162,7 +162,13 @@
                                         <p id="description" class="text-secondary" style="text-align: justify"></p>
                                     </div>
 
-                                    <form id="add-to-cart-form" action="" method="post">
+                                    <form id="add-to-cart-form" th:action="@{/cart/add}" method="post">
+
+                                        <input type="text" name="userId" id="input-user-id"
+                                            th:value="${loginUser != null ? loginUser.id : ''}" class="d-none">
+                                        <input type="text" name="bookId" id="input-book-id" th:value="${book.id}"
+                                            class="d-none">
+
                                         <div class="row">
                                             <div class="col">
                                                 <h6 class="text-body-emphasis">Quantity:</h6>
@@ -178,8 +184,8 @@
                                                     </span>
 
                                                     <input th:min="${book.stockQuantity > 0 ? 1 : 0}"
-                                                        th:max="${book.stockQuantity}"
-                                                        th:value="${cartQuantity != null ? cartQuantity : 1}"
+                                                        th:max="${maxQuantity != null ? maxQuantity : book.stockQuantity}"
+                                                        th:value="${book.stockQuantity > 0 ? 1 : 0}"
                                                         class="form-control text-center border-success border-start-0"
                                                         name="quantity" type="number" id="input-quantity" />
 
@@ -350,6 +356,15 @@
                 interval: false,
             });
         });
+    </script>
+
+    <script th:inline="javascript" th:if="${addStatus != null}">
+        const status = /*[[${addStatus}]]*/ '';
+        toastr.options.timeOut = 5000;
+        if (status)
+            toastr.success('Add to cart successfully');
+        else
+            toastr.success('Add to cart failure');
     </script>
 </body>
 

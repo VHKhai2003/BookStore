@@ -16,6 +16,8 @@ import com.example.bookstore.model.Book;
 import com.example.bookstore.service.BookService;
 import com.example.bookstore.service.CartService;
 
+import jakarta.servlet.http.HttpSession;
+
 @Controller
 public class BookController {
 
@@ -34,20 +36,23 @@ public class BookController {
     }
 
     @GetMapping("/book/{id}")
-    public String getBookInfo(Model model, @PathVariable UUID id, Authentication authentication) {
+    public String getBookInfo(Model model, @PathVariable UUID id, Authentication authentication, HttpSession session) {
         Book book = bookService.getBookInfo(id);
         model.addAttribute("book", book);
         model.addAttribute("relatedBooks", book.getGenre().getBooks());
 
         // check in user's cart
-        if (authentication.isAuthenticated()) {
+        if (authentication != null && authentication.isAuthenticated()) {
             UserDto loginUser = (UserDto) model.getAttribute("loginUser");
             CartDto cartDto = cartService.getCartOfUserAndBook(loginUser.getId(), id);
             if (cartDto != null) {
-                model.addAttribute("cartQuantity", cartDto.getQuantity());
+                model.addAttribute("maxQuantity", book.getStockQuantity() - cartDto.getQuantity());
             }
         }
 
+        Boolean addStatus = (Boolean) session.getAttribute("addStatus");
+        session.removeAttribute("addStatus");
+        model.addAttribute("addStatus", addStatus);
         return "book";
     }
 }

@@ -29,9 +29,7 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public CartDto getCartOfUserAndBook(UUID userId, UUID bookId) {
-        User user = User.builder().id(userId).build();
-        Book book = Book.builder().id(bookId).build();
-        Cart cart = cartRepository.findByUserAndBook(user, book).orElse(null);
+        Cart cart = cartRepository.findById(new CartId(userId, bookId)).orElse(null);
         CartDto cartDto = null;
         // user's cart has this book
         if (cart != null) {
@@ -96,6 +94,39 @@ public class CartServiceImpl implements CartService {
             return cartDto;
         }).toList();
         return cartDtos;
+    }
+
+    @Override
+    public void removeFromCart(UUID userId, UUID bookId) {
+        CartId cartId = new CartId(userId, bookId);
+        cartRepository.deleteById(cartId);
+    }
+
+    @Override
+    public boolean updateCart(UUID userId, UUID bookId, String operation) {
+
+        Cart cart = cartRepository.findById(new CartId(userId, bookId))
+                .orElseThrow(() -> new CustomException(404, "Not found an item in cart"));
+        int quantity = cart.getQuantity();
+        int stock = cart.getBook().getStockQuantity();
+
+        if (operation.equalsIgnoreCase("increase")) {
+            if (quantity + 1 > stock)
+                return false;
+            quantity = quantity + 1;
+        } else {
+            // descrease
+            if (quantity > 1)
+                quantity = quantity - 1;
+            else if (quantity == 1) {
+                cartRepository.delete(cart);
+                return true;
+            } else
+                return false;
+        }
+        cart.setQuantity(quantity);
+        cartRepository.save(cart);
+        return true;
     }
 
 }

@@ -65,18 +65,21 @@
 
                                             <div class="col-6 col-lg-6">
                                                 <div class="w-75 btn-group">
-                                                    <a class="btn btn-outline-success py-2" href="#">
+                                                    <a class="btn btn-outline-success py-2"
+                                                        th:href="@{/cart/decrease/{bookId}(bookId=${item.book.id})}">
                                                         <i class="fas fa-minus"></i>
                                                     </a>
                                                     &nbsp;&nbsp;&nbsp;
-                                                    <a class="btn btn-outline-success py-2" href="#">
+                                                    <a class="btn btn-outline-success py-2"
+                                                        th:href="@{/cart/increase/{bookId}(bookId=${item.book.id})}">
                                                         <i class="fas fa-plus"></i>
                                                     </a>
                                                 </div>
                                             </div>
 
                                             <div class="col-2 text-end">
-                                                <a class="btn btn-danger py-2" href="#">
+                                                <a class="btn btn-danger py-2"
+                                                    th:href="@{/cart/delete/{bookId}(bookId=${item.book.id})}">
                                                     <i class="fa-solid fa-trash-can"></i>
                                                 </a>
                                             </div>
@@ -135,6 +138,16 @@
         const carts = /*[[${cartInfo}]]*/ '';
         let total = carts.reduce((prevVal, item) => prevVal + item.quantity * item.book.price, 0);
         $('#total').html('$ ' + total.toFixed(2));
+
+        const successMessage = /*[[${successMessage}]]*/ '';
+        const failureMessage = /*[[${failureMessage}]]*/ '';
+        toastr.options.timeOut = 5000;
+        if (successMessage) {
+            toastr.success(successMessage);
+        }
+        if (failureMessage) {
+            toastr.error(failureMessage);
+        }
     </script>
 </body>
 

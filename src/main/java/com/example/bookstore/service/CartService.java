@@ -12,4 +12,8 @@ public interface CartService {
     boolean addToCart(CartAddingDto cartDto);
 
     List<CartDto> getCartOfUser(UUID userId);
+
+    void removeFromCart(UUID userId, UUID bookId);
+
+    boolean updateCart(UUID userId, UUID bookId, String operation);
 }

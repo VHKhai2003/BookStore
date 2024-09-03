@@ -32,6 +32,7 @@ public class BookController {
             @RequestParam(required = false) String genre,
             @RequestParam(defaultValue = "1") int page) {
         model.addAttribute("booksData", bookService.findBooks(keyword, genre, page));
+        model.addAttribute("currentPage", "home");
         return "index";
     }
 

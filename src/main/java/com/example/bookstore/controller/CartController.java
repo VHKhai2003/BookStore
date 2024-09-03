@@ -30,6 +30,7 @@ public class CartController {
         UserDto user = (UserDto) model.getAttribute("loginUser");
         List<CartDto> cartDtos = cartService.getCartOfUser(user.getId());
         model.addAttribute("cartInfo", cartDtos);
+        model.addAttribute("currentPage", "cart");
         model.addAttribute("successMessage", session.getAttribute("successMessage"));
         model.addAttribute("failureMessage", session.getAttribute("failureMessage"));
         session.removeAttribute("successMessage");

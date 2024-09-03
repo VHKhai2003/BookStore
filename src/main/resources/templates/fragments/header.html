@@ -20,14 +20,16 @@
     <header class="p-3 border-bottom">
         <div class="container">
             <div class="d-flex flex-wrap align-items-center justify-content-center">
-                <a href="/" class="d-flex align-items-center mb-lg-0 link-body-emphasis text-decoration-none me-2 fs-3">
+                <a th:href="@{/}"
+                    class="d-flex align-items-center mb-lg-0 link-body-emphasis text-decoration-none me-2 fs-3">
                     <!-- <i class="fa-solid fa-book"></i> -->
                     <img style="width: 38px" th:src="@{/favicon.png}" alt="Book icon" />
                 </a>
 
                 <ul class="nav nav-pills col-auto me-auto justify-content-center mb-md-0 fw-bold">
                     <li class="nav-item" id="home">
-                        <a th:href="@{/}" class="nav-link px-2 link-body-emphasis">
+                        <a th:href="@{/}" class="nav-link px-2 link-secondary"
+                            th:classappend="${(currentPage == null || currentPage != 'home') ? 'link-body-emphasis' : ''}">
                             Home
                         </a>
                         <ul class="dropdown-menu" id="lv1-menu">
@@ -51,15 +53,15 @@
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a th:href="@{/orders}" class="nav-link px-2 link-secondary">Order</a>
+                        <a th:href="@{/orders}" class="nav-link px-2 link-secondary"
+                            th:classappend="${(currentPage == null || currentPage != 'order') ? 'link-body-emphasis' : ''}">Order</a>
                     </li>
                     <li class="nav-item">
-                        <a th:href="@{/cart}" class="nav-link px-2 link-body-emphasis position-relative">
+                        <a th:href="@{/cart}" class="nav-link px-2 link-secondary position-relative"
+                            th:classappend="${(currentPage == null || currentPage != 'cart') ? 'link-body-emphasis' : ''}">
                             <i class="fa-solid fa-cart-shopping"></i>
-                            <span
-                                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                2
-                            </span>
+                            <span th:text="${numCart}"
+                                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"></span>
                         </a>
                     </li>
                 </ul>

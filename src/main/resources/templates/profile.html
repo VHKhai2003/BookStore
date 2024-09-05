@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <th:block th:replace="~{fragments/cdn :: bootstrap-fontawesome-jquery}"></th:block>
+    <title>BookStore</title>
+</head>
+
+<body>
+    <div th:replace="~{fragments/header :: header}"></div>
+
+    <main class="bg-body-secondary">
+        <div class="container py-2">
+            <div class="row justify-content-center align-items-center my-3">
+                <div class="col col-12 col-lg-10">
+                    <div class="card row g-0 border rounded overflow-hidden flex-md-row shadow">
+                        <div class="col col-12 col-md-5 col-xl-4 d-lg-block" id="img-avatar" role="button">
+                            <img th:src="@{${loginUser.avatar}}" class="w-100 h-100 shadow" style="object-fit: cover" />
+                        </div>
+                        <form th:action="@{/user}" method="post"
+                            class="col col-12 col-md-7 col-xl-8 px-4 py-3 d-flex flex-column needs-validation"
+                            novalidate enctype="multipart/form-data" id="update-profile">
+                            <h1 class="d-inline-block mb-2 text-primary-emphasis">Profile</h1>
+                            <input type="file" accept="image/*" name="avatarImage" id="input-avatar" class="d-none" />
+                            <div class="form-floating mb-2">
+                                <input class="form-control border-info" required name="name" id="name"
+                                    th:value="${loginUser.name}" spellcheck="false" />
+                                <label for="name">Name</label>
+                            </div>
+                            <div class="form-floating mb-2">
+                                <input class="form-control border-info" type="email" required name="email" id="email"
+                                    th:value="${loginUser.email}" spellcheck="false" />
+                                <label for="email">Email</label>
+                            </div>
+                            <div class="form-floating mb-2">
+                                <input class="form-control border-info" name="phoneNumber" id="phone_number" required
+                                    th:value="${loginUser.phoneNumber}" spellcheck="false" />
+                                <label for="phone_number">Phone</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input class="form-control border-info" name="address" id="address"
+                                    th:value="${loginUser.address}" spellcheck="false" />
+                                <label for="address">Address</label>
+                            </div>
+
+                            <div class="text-end">
+                                <!-- <button class="btn btn-primary">Change password</button> -->
+                                <button type="submit" class="btn btn-primary">
+                                    Save changes
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+    <script>
+        function fullnameValidate(fullName) {
+            const FULLNAME_REGEX =
+                /^[A-ZÁÀẢÃẠÂẤẦẨẪẬĂẮẰẲẴẶĐÉÈẺẼẸÊẾỀỂỄỆÚÙỦŨỤƯỨỪỬỮỰÍÌỈĨỊÓÒỎÕỌƠỚỜỞỠỢÔỐỒỔỖỘÝỲỶỸỴ][a-záàảãạâấầẩẫậăắằẳẵặđéèẻẽẹêếềểễệúùủũụưứừửữựíìỉĩịóòỏõọơớờởỡợôốồổỗộýỳỷỹỵ]*$/;
+            const names = fullName.trim().split(/\s+/);
+            for (let i = 0; i < names.length; i++) {
+                if (!FULLNAME_REGEX.test(names[i])) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function emailValidate(email) {
+            const EMAIL_REGEX =
+                /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+            if (!EMAIL_REGEX.test(email)) {
+                return false;
+            }
+            return true;
+        }
+
+        function phoneValidate(phone) {
+            const PHONE_REGEX = /(84|0[3|5|7|8|9])+([0-9]{8})/;
+            if (!PHONE_REGEX.test(phone)) {
+                return false;
+            }
+            return true;
+        }
+
+        function handleSubmit(fullName, email, phone) {
+            if (!fullnameValidate(fullName) || !emailValidate(email) || !phoneValidate(phone)) {
+                return false;
+            }
+            return true;
+        }
+
+        $(() => {
+            $('#img-avatar').on('click', () => {
+                $('#input-avatar').click();
+            });
+
+            $('#input-avatar').change(function (event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        const imagePreview = $('#img-avatar');
+                        imagePreview.html(`
+                            <img
+                                role = "button"
+                                class="w-100 h-100 shadow"
+                                style="
+                                    object-fit: cover;
+                                "
+                                src="${e.target.result}"
+                            />
+                        `);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            $('#name').on('input', (e) => {
+                $(e.target).removeClass('border-info');
+                const fullName = e.target.value;
+                if (!fullnameValidate(fullName)) {
+                    $(e.target).addClass('is-invalid').removeClass('is-valid');
+                    var newDiv = $('<div>', {
+                        class: 'invalid-tooltip w-100',
+                        text: '4 - 24 characters and in Capital format',
+                    });
+                    $(e.target).parent().append(newDiv);
+                } else {
+                    $(e.target).addClass('is-valid').removeClass('is-invalid');
+                }
+            });
+
+            $('#name').blur((e) => {
+                $(e.target).parent().find('div').remove();
+            });
+
+            $('#email').on('input', (e) => {
+                $(e.target).removeClass('border-info');
+                const email = e.target.value;
+                if (!emailValidate(email)) {
+                    $(e.target).addClass('is-invalid').removeClass('is-valid');
+                    var newDiv = $('<div>', {
+                        class: 'invalid-tooltip w-100',
+                        text: 'Email is invalid',
+                    });
+                    $(e.target).parent().append(newDiv);
+                } else {
+                    $(e.target).addClass('is-valid').removeClass('is-invalid');
+                }
+            });
+
+            $('#email').blur((e) => {
+                $(e.target).parent().find('div').remove();
+            });
+
+            $('#phoneNumber').on('input', (e) => {
+                $(e.target).removeClass('border-info');
+                const phone = e.target.value;
+                if (!phoneValidate(phone)) {
+                    $(e.target).addClass('is-invalid').removeClass('is-valid');
+                    var newDiv = $('<div>', {
+                        class: 'invalid-tooltip w-100',
+                        text: 'Phone number is invalid',
+                    });
+                    $(e.target).parent().append(newDiv);
+                } else {
+                    $(e.target).addClass('is-valid').removeClass('is-invalid');
+                }
+            });
+
+            $('#phone_number').blur((e) => {
+                $(e.target).parent().find('div').remove();
+            });
+
+            $('#update-profile').submit(async (e) => {
+                const fullName = $('#name').val();
+                const email = $('#email').val();
+                const phone = $('#phone_number').val();
+                if (!handleSubmit(fullName, email, phone)) {
+                    e.preventDefault();
+                    toastr.options.timeOut = 3000;
+                    toastr.error('Failed! Please check your information');
+                }
+            });
+        });
+    </script>
+
+    <script th:inline="javascript">
+        const status = /*[[${updateStatus}]]*/ '';
+        toastr.options.timeOut = 5000;
+        if (status)
+            toastr.success("Update profile successfully");
+        else
+            toastr.success("Failure to profile");
+    </script>
+</body>
+
+</html>

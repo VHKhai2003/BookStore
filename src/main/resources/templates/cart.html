@@ -113,7 +113,7 @@
                                                 Total:
                                             </h5>
                                             &nbsp;&nbsp;&nbsp;
-                                            <h4 id="total"></h4>
+                                            <h4 id="total" th:text="${'$'+totalCost}"></h4>
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-4 col-lg-3">
@@ -135,9 +135,9 @@
     <div th:replace="~{fragments/footer :: footer}"></div>
 
     <script th:inline="javascript">
-        const carts = /*[[${cartInfo}]]*/ '';
-        let total = carts.reduce((prevVal, item) => prevVal + item.quantity * item.book.price, 0);
-        $('#total').html('$ ' + total.toFixed(2));
+        // const carts = [];
+        // let total = carts.reduce((prevVal, item) => prevVal + item.quantity * item.book.price, 0);
+        // $('#total').html('$ ' + total.toFixed(2));
 
         const successMessage = /*[[${successMessage}]]*/ '';
         const failureMessage = /*[[${failureMessage}]]*/ '';

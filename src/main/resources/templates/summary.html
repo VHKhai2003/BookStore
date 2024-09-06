@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <th:block th:replace="~{fragments/cdn :: bootstrap-fontawesome-jquery}"></th:block>
+    <title>BookStore</title>
+    <style>
+        .one-line-ellipsis {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            /* Number of lines to show */
+            -webkit-box-orient: vertical;
+        }
+    </style>
+</head>
+
+<body>
+    <div th:replace="~{fragments/header :: header}"></div>
+
+    <main>
+        <div class="py-2 bg-body-secondary">
+            <div class="container">
+                <form class="card shadow border-0 my-3" method="POST">
+                    <div class="card-header text-bg-dark py-3">
+                        <div class="row px-4 align-items-center">
+                            <div class="col-6 ps-0">
+                                <h4 class="pt-2 text-white text-uppercase">Order Summary</h4>
+                            </div>
+                            <div class="col-6 pe-0 text-end">
+                                <a class="btn btn-outline-danger btn-sm py-2" th:href="@{/cart}">
+                                    Back to Cart
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="container rounded p-2">
+                            <div class="row">
+                                <div class="col-12 col-lg-6 pb-4">
+                                    <div class="row">
+                                        <h4 class="d-flex justify-content-between align-items-center mb-3">
+                                            <span class="text-info">Delivery Details:</span>
+                                        </h4>
+                                    </div>
+                                    <div class="row my-1">
+                                        <div class="col-3">
+                                            <label for="name" class="fw-semibold">Fullname</label>
+                                        </div>
+                                        <div class="col-9">
+                                            <input class="form-control" type="text" data-val="true"
+                                                data-val-required="The Name field is required." id="name" name="name"
+                                                th:value="${loginUser.name}" required />
+                                            <span th:text="${nameError != null ? nameError : ''}"
+                                                class="text-danger field-validation-valid"
+                                                data-valmsg-for="OrderHeader.Name" data-valmsg-replace="true">
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="row my-1">
+                                        <div class="col-3">
+                                            <label for="phone_number" class="fw-semibold">
+                                                Phone
+                                            </label>
+                                        </div>
+                                        <div class="col-9">
+                                            <input class="form-control" type="text" data-val="true"
+                                                data-val-required="The PhoneNumber field is required." id="phone_number"
+                                                name="phoneNumber" th:value="${loginUser.phoneNumber}" required />
+                                            <span th:text="${phoneError != null ? phoneError : ''}"
+                                                class="text-danger field-validation-valid"
+                                                data-valmsg-for="phone_number" data-valmsg-replace="true">
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="row my-1">
+                                        <div class="col-3">
+                                            <label for="address" class="fw-semibold">Address</label>
+                                        </div>
+                                        <div class="col-9">
+                                            <input class="form-control" type="text" data-val="true"
+                                                data-val-required="The StreetAddress field is required." id="address"
+                                                name="address" th:value="${loginUser.address}" required />
+                                            <span th:text="${addressError != null ? addressError : ''}"
+                                                class="text-danger field-validation-valid" data-valmsg-for="address"
+                                                data-valmsg-replace="true">
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-lg-5 offset-lg-1">
+                                    <h4 class="d-flex justify-content-between align-items-center mb-3">
+                                        <span class="text-info">Order Summary:</span>
+                                    </h4>
+                                    <ul class="list-group mb-3">
+
+                                        <li th:each="item : ${cartInfo}"
+                                            class="list-group-item d-flex justify-content-between">
+                                            <div class="flex-fill">
+                                                <h6 class="my-0 one-line-ellipsis" th:title="${item.book.title}"
+                                                    th:text="${item.book.title}">
+                                                </h6>
+                                                <small class="text-muted" th:text="${item.quantity}"></small>
+                                            </div>
+                                            <span class="text-muted"
+                                                th:text="${item.book.price * item.quantity}"></span>
+                                        </li>
+
+                                        <li class="list-group-item d-flex justify-content-between bg-light">
+                                            <span class="text-success">Total (USD)</span>
+                                            <strong class="text-success" th:text="${totalCost}"></strong>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="row p-1">
+                            <div class="col-12 col-md-8 col-lg-9 pt-2 mb-2">
+                                <p class="m-0 text-danger" style="font-size: 14px">
+                                    (*) Estimate Arrival Date: <span id="from-time"></span> - <span id="to-time"></span>
+                                </p>
+                            </div>
+                            <div class="col-12 col-md-4 col-lg-3">
+                                <button type="submit" value="Place Order" class="btn btn-primary form-control">
+                                    Place Order
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+    <script>
+        $(() => {
+            const from = new Date();
+            const to = new Date();
+            to.setDate(to.getDate() + 7);
+            $('#from-time').text(from.toLocaleDateString());
+            $('#to-time').text(to.toLocaleDateString());
+        })
+    </script>
+</body>
+
+</html>

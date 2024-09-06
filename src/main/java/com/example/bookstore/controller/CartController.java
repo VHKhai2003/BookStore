@@ -31,6 +31,8 @@ public class CartController {
         List<CartDto> cartDtos = cartService.getCartOfUser(user.getId());
         model.addAttribute("cartInfo", cartDtos);
         model.addAttribute("currentPage", "cart");
+        model.addAttribute("totalCost", cartService.calculateTotalCost(cartDtos));
+        // message for update item in cart
         model.addAttribute("successMessage", session.getAttribute("successMessage"));
         model.addAttribute("failureMessage", session.getAttribute("failureMessage"));
         session.removeAttribute("successMessage");
@@ -74,5 +76,18 @@ public class CartController {
         else
             session.setAttribute("failureMessage", "Failed to decrease quantity");
         return "redirect:/cart";
+    }
+
+    @GetMapping("/summary")
+    public String getSummary(Model model) {
+        UserDto user = (UserDto) model.getAttribute("loginUser");
+        List<CartDto> cartDtos = cartService.getCartOfUser(user.getId());
+        if (cartDtos.isEmpty()) {
+            return "redirect:/cart";
+        }
+        model.addAttribute("cartInfo", cartDtos);
+        model.addAttribute("currentPage", "cart");
+        model.addAttribute("totalCost", cartService.calculateTotalCost(cartDtos));
+        return "summary";
     }
 }

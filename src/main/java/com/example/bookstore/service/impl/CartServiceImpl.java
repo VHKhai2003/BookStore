@@ -129,4 +129,13 @@ public class CartServiceImpl implements CartService {
         return true;
     }
 
+    @Override
+    public double calculateTotalCost(List<CartDto> cartDtos) {
+        double totalCost = 0;
+        for (CartDto item : cartDtos) {
+            totalCost += item.getQuantity() * item.getBook().getPrice();
+        }
+        return (double) Math.round(totalCost * 100) / 100;
+    }
+
 }

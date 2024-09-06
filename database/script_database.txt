@@ -364,4 +364,8 @@ update books set status = 'active';
 
 alter table books alter column price type float;
 
+alter table orders alter column total_amount type float;
+
+alter table order_details alter column price type float;
+
 alter table orders add receiver text default 'Orderer';

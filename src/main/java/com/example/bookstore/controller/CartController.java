@@ -79,7 +79,7 @@ public class CartController {
     }
 
     @GetMapping("/summary")
-    public String getSummary(Model model) {
+    public String getSummary(Model model, HttpSession session) {
         UserDto user = (UserDto) model.getAttribute("loginUser");
         List<CartDto> cartDtos = cartService.getCartOfUser(user.getId());
         if (cartDtos.isEmpty()) {
@@ -88,6 +88,12 @@ public class CartController {
         model.addAttribute("cartInfo", cartDtos);
         model.addAttribute("currentPage", "cart");
         model.addAttribute("totalCost", cartService.calculateTotalCost(cartDtos));
+        model.addAttribute("nameError", session.getAttribute("nameError"));
+        model.addAttribute("phoneError", session.getAttribute("phoneError"));
+        model.addAttribute("addressError", session.getAttribute("addressError"));
+        session.removeAttribute("nameError");
+        session.removeAttribute("phoneError");
+        session.removeAttribute("addressError");
         return "summary";
     }
 }

@@ -1,5 +1,13 @@
 package com.example.bookstore.service;
 
-public interface OrderService {
+import java.util.List;
+import java.util.UUID;
 
+import com.example.bookstore.model.Order;
+import com.example.bookstore.model.OrderDetail;
+
+public interface OrderService {
+    List<Order> getOrdersByUser(UUID userId);
+
+    List<OrderDetail> getDetailsOfOrder(UUID orderId);
 }

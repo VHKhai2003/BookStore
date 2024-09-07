@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <th:block th:replace="~{fragments/cdn :: bootstrap-fontawesome-jquery}"></th:block>
+    <title>BookStore</title>
+</head>
+
+<body>
+
+    <div th:replace="~{fragments/header :: header}"></div>
+
+    <main class="d-flex flex-nowrap h-100">
+        <div id="content" class="w-100 h-100">
+
+            <div class="bg-body-secondary p-3">
+                <div class="container">
+                    <!-- Change the content of page here -->
+                    <div class="row justify-content-center">
+                        <div class="col-12">
+                            <div class="card shadow border-0">
+                                <div class="card-header text-bg-dark py-3">
+                                    <div class="row px-4 align-items-center">
+                                        <div class="col-6 ps-0">
+                                            <h4 class="pt-2 text-white text-uppercase">
+                                                Order Detail
+                                            </h4>
+                                        </div>
+                                        <div class="col-6 pe-0 text-end">
+                                            <a class="btn btn-outline-danger btn-sm py-2 text-uppercase"
+                                                th:href="@{/order}">
+                                                Back to Orders
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="container rounded p-2">
+                                        <div class="row">
+                                            <form id="update-info-form" class="col-12 col-lg-6 pb-4" method="POST">
+                                                <fieldset>
+                                                    <div class="row">
+                                                        <h4
+                                                            class="d-flex justify-content-between align-items-center mb-3">
+                                                            <span class="text-info">Delivery Details:</span>
+                                                        </h4>
+                                                    </div>
+                                                    <div class="row my-1">
+                                                        <div class="col-3">
+                                                            <label class="fw-semibold">Fullname</label>
+                                                        </div>
+                                                        <div class="col-9">
+                                                            <input class="form-control" type="text" data-val="true"
+                                                                data-val-required="The Name field is required."
+                                                                id="receiver" name="receiver"
+                                                                th:value="${order.receiver != null ? order.receiver : order.orderBy.name}"
+                                                                required />
+                                                            <span class="text-danger field-validation-valid"
+                                                                data-valmsg-for="receiver" data-valmsg-replace="true"
+                                                                th:text="${receiverError == null ? '' : receiverError}">
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row my-1">
+                                                        <div class="col-3">
+                                                            <label class="fw-semibold">Phone</label>
+                                                        </div>
+                                                        <div class="col-9">
+                                                            <input class="form-control" type="text" data-val="true"
+                                                                data-val-required="The PhoneNumber field is required."
+                                                                id="phone_number" name="phoneNumber"
+                                                                th:value="${order.phoneNumber}" required />
+                                                            <span class="text-danger field-validation-valid"
+                                                                data-valmsg-for="phone_number"
+                                                                data-valmsg-replace="true"
+                                                                th:text="${phoneError == null ? '' : phoneError}">
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row my-1">
+                                                        <div class="col-3">
+                                                            <label class="fw-semibold">Address</label>
+                                                        </div>
+                                                        <div class="col-9">
+                                                            <input class="form-control" type="text" data-val="true"
+                                                                data-val-required="The Address field is required."
+                                                                id="delivery_address" name="deliveryAddress"
+                                                                th:value="${order.deliveryAddress}" required />
+                                                            <span class="text-danger field-validation-valid"
+                                                                data-valmsg-for="delivery_address"
+                                                                data-valmsg-replace="true"
+                                                                th:text="${addressError == null ? '' : addressError}">
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row my-1">
+                                                        <div class="col-3">
+                                                            <label class="fw-semibold">Order date</label>
+                                                        </div>
+                                                        <div class="col-9">
+                                                            <input class="form-control" type="text" data-val="true"
+                                                                data-val-required="The StreetAddress field is required."
+                                                                id="OrderHeader_StreetAddress"
+                                                                name="OrderHeader.StreetAddress"
+                                                                th:value="${order.orderDate}" readonly />
+                                                            <span class="text-danger field-validation-valid"
+                                                                data-valmsg-for="OrderHeader.StreetAddress"
+                                                                data-valmsg-replace="true"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row my-1">
+                                                        <div class="col-3">
+                                                            <label class="fw-semibold text-nowrap">Shipping date</label>
+                                                        </div>
+                                                        <div class="col-9">
+                                                            <input class="form-control" type="text" data-val="true"
+                                                                data-val-required="The StreetAddress field is required."
+                                                                id="OrderHeader_StreetAddress"
+                                                                name="OrderHeader.StreetAddress"
+                                                                th:value="${order.deliveryDate}" readonly />
+                                                            <span class="text-danger field-validation-valid"
+                                                                data-valmsg-for="OrderHeader.StreetAddress"
+                                                                data-valmsg-replace="true"></span>
+                                                        </div>
+                                                    </div>
+                                                </fieldset>
+
+                                                <button id="submit-update-info-btn" type="submit"
+                                                    class="btn btn-warning text-light fw-semibold w-100 mt-2">
+                                                    UPDATE ORDER DETAILS
+                                                </button>
+                                            </form>
+                                            <div class="col-12 col-lg-5 offset-lg-1">
+                                                <h4 class="d-flex justify-content-between align-items-center mb-3">
+                                                    <span class="text-info">Order Summary:</span>
+                                                </h4>
+                                                <button
+                                                    th:classappend="${order.deliveryStatus == 'Cancel' ? 'btn-outline-danger' : 'btn-outline-success'}"
+                                                    class="btn w-100 mb-2 text-uppercase"
+                                                    th:text="${'ORDER STATUS - ' + order.deliveryStatus}">
+                                                </button>
+                                                <ul class="list-group mb-3">
+
+                                                    <li th:each="item : ${orderDetails}"
+                                                        class="list-group-item d-flex justify-content-between">
+                                                        <div class="flex-fill">
+                                                            <h6 class="my-0" th:text="${item.book.title}"></h6>
+                                                            <small class="text-muted d-block"
+                                                                th:text="${'Price: $' + item.book.price}">
+                                                            </small>
+                                                            <small class="text-muted d-block"
+                                                                th:text="${'Quantity: ' + item.quantity}">>
+                                                            </small>
+                                                        </div>
+                                                        <span class="text-muted" th:text="${'$' + item.price}"></span>
+                                                    </li>
+
+
+                                                    <li
+                                                        class="list-group-item d-flex justify-content-between align-items-center bg-light py-3">
+                                                        <h4 class="text-success mb-0 text-uppercase">
+                                                            Total
+                                                        </h4>
+                                                        <h4 class="text-success mb-0"
+                                                            th:text="${'$' + order.totalAmount}"></h4>
+                                                    </li>
+                                                </ul>
+
+                                                <!-- payment -->
+                                                <a th:if="order.deliveryStatus == 'Pending'" href="#"
+                                                    id="next-action-btn"
+                                                    class="btn btn-success w-100 fw-semibold text-uppercase">
+                                                    PAY NOW
+                                                </a>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+</body>
+
+</html>

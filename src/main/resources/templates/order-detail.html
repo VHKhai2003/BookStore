@@ -39,7 +39,8 @@
                                 <div class="card-body">
                                     <div class="container rounded p-2">
                                         <div class="row">
-                                            <form id="update-info-form" class="col-12 col-lg-6 pb-4" method="POST">
+                                            <form id="update-info-form" class="col-12 col-lg-6 pb-4" method="POST"
+                                                th:action="@{/order/detail/{id}(id=${order.id})}">
                                                 <fieldset>
                                                     <div class="row">
                                                         <h4
@@ -54,12 +55,12 @@
                                                         <div class="col-9">
                                                             <input class="form-control" type="text" data-val="true"
                                                                 data-val-required="The Name field is required."
-                                                                id="receiver" name="receiver"
+                                                                id="receiver" name="name"
                                                                 th:value="${order.receiver != null ? order.receiver : order.orderBy.name}"
                                                                 required />
                                                             <span class="text-danger field-validation-valid"
                                                                 data-valmsg-for="receiver" data-valmsg-replace="true"
-                                                                th:text="${receiverError == null ? '' : receiverError}">
+                                                                th:text="${nameError == null ? '' : nameError}">
                                                             </span>
                                                         </div>
                                                     </div>
@@ -86,7 +87,7 @@
                                                         <div class="col-9">
                                                             <input class="form-control" type="text" data-val="true"
                                                                 data-val-required="The Address field is required."
-                                                                id="delivery_address" name="deliveryAddress"
+                                                                id="delivery_address" name="address"
                                                                 th:value="${order.deliveryAddress}" required />
                                                             <span class="text-danger field-validation-valid"
                                                                 data-valmsg-for="delivery_address"
@@ -169,7 +170,7 @@
                                                 </ul>
 
                                                 <!-- payment -->
-                                                <a th:if="order.deliveryStatus == 'Pending'" href="#"
+                                                <a th:if="${order.deliveryStatus == 'Pending'}" href="#"
                                                     id="next-action-btn"
                                                     class="btn btn-success w-100 fw-semibold text-uppercase">
                                                     PAY NOW
@@ -189,6 +190,35 @@
 
     <div th:replace="~{fragments/footer :: footer}"></div>
 
+    <script th:inline="javascript">
+        $(() => {
+            const deliveryStatus = /*[[${order.deliveryStatus}]]*/ '';
+            if (
+                deliveryStatus == 'Shipping' ||
+                deliveryStatus == 'Shipped' ||
+                deliveryStatus == 'Cancel'
+            ) {
+                // $('#cancel-action-btn').remove();
+                $('#update-info-form').submit((e) => {
+                    e.preventDefault();
+                });
+                $('#submit-update-info-btn').attr('disabled', true);
+                $('#update-info-form fieldset').prop('disabled', true);
+            }
+            // $('#cancel-status-form').submit((e) => {
+            //     $('#cancel_status').val('Cancel');
+            // });
+        });
+
+    </script>
+    <script th:inline="javascript" th:if="${updateStatus != null}">
+        const updateStatus = /*[[${updateStatus}]]*/ '';
+        toastr.options.timeOut = 3000;
+        if (updateStatus)
+            toastr.success('Update successfully');
+        else
+            toastr.error('Update failure');
+    </script>
 </body>
 
 </html>

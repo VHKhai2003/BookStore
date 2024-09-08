@@ -36,7 +36,7 @@
                                             <thead>
                                                 <tr>
                                                     <th># &nbsp;&nbsp;</th>
-                                                    <th>Name</th>
+                                                    <th>Receiver</th>
                                                     <th>Phone</th>
                                                     <th>Adress</th>
                                                     <th>Status</th>
@@ -47,7 +47,9 @@
                                             <tbody>
                                                 <tr th:each="order,iterStat : ${orders}">
                                                     <td th:text="${iterStat.index + 1}"></td>
-                                                    <td th:text="${order.orderBy.name}"></td>
+                                                    <td
+                                                        th:text="${order.receiver != null ? order.receiver :order.orderBy.name}">
+                                                    </td>
                                                     <td th:text="${order.phoneNumber}"></td>
                                                     <td th:text="${order.deliveryAddress}"></td>
                                                     <td>

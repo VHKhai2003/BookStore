@@ -16,7 +16,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests(authz -> authz
-                .requestMatchers("/bootstrap/**", "/favicon.png",
+                .requestMatchers("/bootstrap/**", "/favicon.png", "/favicon.ico",
                         "/fontawesome/**", "/jquery/**", "/images/**", "/toastr/**",
                         "/", "/book/**", "/auth/login", "/auth/register", "/datatable/**")
                 .permitAll()

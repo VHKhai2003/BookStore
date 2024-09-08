@@ -64,6 +64,35 @@ public class OrderController {
         model.addAttribute("currentPage", "order");
         model.addAttribute("orderDetails", orderDetails);
         model.addAttribute("order", orderDetails.get(0).getOrder());
+        model.addAttribute("updateStatus", session.getAttribute("updateStatus"));
+        model.addAttribute("nameError", session.getAttribute("nameError"));
+        model.addAttribute("phoneError", session.getAttribute("phoneError"));
+        model.addAttribute("addressError", session.getAttribute("addressError"));
+        session.removeAttribute("updateStatus");
+        session.removeAttribute("nameError");
+        session.removeAttribute("phoneError");
+        session.removeAttribute("addressError");
         return "order-detail";
+    }
+
+    @PostMapping("/detail/{id}")
+    public String updateOrder(@PathVariable UUID id, RecipientDto recipientDto, Model model, HttpSession session) {
+        boolean valid = true;
+        if (!ValidationUtils.notBlankValidate(recipientDto.getName())) {
+            session.setAttribute("nameError", "(*) Name is required!");
+            valid = false;
+        }
+        if (!ValidationUtils.validatePhone(recipientDto.getPhoneNumber())) {
+            session.setAttribute("phoneError", "(*) Invalid phone number!");
+            valid = false;
+        }
+        if (!ValidationUtils.notBlankValidate(recipientDto.getAddress())) {
+            session.setAttribute("addressError", "(*) Address is required!");
+            valid = false;
+        }
+        if (valid) {
+            session.setAttribute("updateStatus", orderService.updateRecipentInfo(id, recipientDto));
+        }
+        return "redirect:/order/detail/" + id.toString();
     }
 }

@@ -42,9 +42,13 @@ public class OrderController {
             session.setAttribute("addressError", "(*) Address is required!");
             valid = false;
         }
+
         if (valid) {
-            // implement later ...
-            return "redirect:/order";
+            // call service to create an order
+            UserDto user = (UserDto) model.getAttribute("loginUser");
+            UUID orderId = orderService.placeOrder(recipientDto, user);
+            session.setAttribute("placeOrderMessage", "Place order successfully");
+            return "redirect:/order/detail/" + orderId.toString();
         }
         return "redirect:/cart/summary";
     }
@@ -68,10 +72,12 @@ public class OrderController {
         model.addAttribute("nameError", session.getAttribute("nameError"));
         model.addAttribute("phoneError", session.getAttribute("phoneError"));
         model.addAttribute("addressError", session.getAttribute("addressError"));
+        model.addAttribute("placeOrderMessage", session.getAttribute("placeOrderMessage"));
         session.removeAttribute("updateStatus");
         session.removeAttribute("nameError");
         session.removeAttribute("phoneError");
         session.removeAttribute("addressError");
+        session.removeAttribute("placeOrderMessage");
         return "order-detail";
     }
 

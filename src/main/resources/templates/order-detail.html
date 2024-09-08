@@ -219,6 +219,10 @@
         else
             toastr.error('Update failure');
     </script>
+    <script th:inline="javascript" th:if="${placeOrderMessage != null}">
+        toastr.options.timeOut = 3000;
+        toastr.success(/*[[${placeOrderMessage}]]*/ '');
+    </script>
 </body>
 
 </html>

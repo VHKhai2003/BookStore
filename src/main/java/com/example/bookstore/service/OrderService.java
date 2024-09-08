@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import com.example.bookstore.dto.RecipientDto;
+import com.example.bookstore.dto.UserDto;
 import com.example.bookstore.model.Order;
 import com.example.bookstore.model.OrderDetail;
 
@@ -13,4 +14,6 @@ public interface OrderService {
     List<OrderDetail> getDetailsOfOrder(UUID orderId);
 
     boolean updateRecipentInfo(UUID orderId, RecipientDto recipient);
+
+    UUID placeOrder(RecipientDto recipientDto, UserDto userDto);
 }

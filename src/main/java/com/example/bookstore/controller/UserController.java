@@ -34,7 +34,6 @@ public class UserController {
         UserDto loginUser = (UserDto) model.getAttribute("loginUser");
         userDto.setId(loginUser.getId());
         try {
-            System.out.println("User dto: " + userDto);
             userService.updateUserInfo(userDto, avatarImage);
             session.setAttribute("updateStatus", true);
         } catch (Exception e) {

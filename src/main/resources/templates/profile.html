@@ -194,13 +194,13 @@
         });
     </script>
 
-    <script th:inline="javascript">
+    <script th:inline="javascript" th:if="${updateStatus != null}">
         const status = /*[[${updateStatus}]]*/ '';
         toastr.options.timeOut = 5000;
         if (status)
             toastr.success("Update profile successfully");
         else
-            toastr.success("Failure to profile");
+            toastr.error("Failure to update profile");
     </script>
 </body>
 

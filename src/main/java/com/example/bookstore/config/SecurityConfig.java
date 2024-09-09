@@ -18,7 +18,7 @@ public class SecurityConfig {
         http.authorizeRequests(authz -> authz
                 .requestMatchers("/bootstrap/**", "/favicon.png", "/favicon.ico",
                         "/fontawesome/**", "/jquery/**", "/images/**", "/toastr/**",
-                        "/", "/book/**", "/auth/login", "/auth/register", "/datatable/**")
+                        "/", "/book/**", "/auth/login", "/auth/register", "/datatable/**", "/utils/**")
                 .permitAll()
                 .requestMatchers("/admin/**").hasRole("Admin")
                 .anyRequest().authenticated())

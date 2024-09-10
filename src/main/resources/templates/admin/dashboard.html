@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en" th:data-bs-theme="${session.darkmode != null and session.darkmode ? 'dark' : 'light'}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <th:block th:replace="~{fragments/cdn :: bootstrap-fontawesome-jquery}"></th:block>
+    <script th:src="@{/chart/chart.min.js}"></script>
+    <title>BookStore</title>
+</head>
+
+<body>
+
+    <main class="d-flex flex-nowrap h-100">
+        <div th:replace="~{admin/fragments/sidebar :: sidebar}"></div>
+
+        <div id="content" class="w-100 h-100">
+            <div th:replace="~{admin/fragments/header :: header}"></div>
+
+            <div class="bg-body-secondary p-3">
+                <div class="container">
+                    <!-- Change the content of page here -->
+                    <div class="row g-3">
+                        <div class="col-xl-4 col-md-6">
+                            <div class="card border-0 border-start border-5 border-primary shadow py-2 opacity-75">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col pe-0">
+                                            <div style="font-size: 14px"
+                                                class="fw-semibold text-primary text-uppercase mb-1 text-nowrap">
+                                                Total products
+                                            </div>
+                                            <div class="h5 mb-0 font-weight-bold">
+                                                99
+                                            </div>
+                                        </div>
+                                        <div class="col-auto opacity-25">
+                                            <i class="fas fa-calendar fa-2x"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-md-6">
+                            <div class="card border-0 border-start border-5 border-success shadow py-2 opacity-75">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col pe-0">
+                                            <div style="font-size: 14px"
+                                                class="fw-semibold text-success text-uppercase mb-1 text-nowrap">
+                                                Earnings (This year)
+                                            </div>
+                                            <div class="h5 mb-0 font-weight-bold">
+                                                9999
+                                            </div>
+                                        </div>
+                                        <div class="col-auto opacity-25">
+                                            <i class="fas fa-dollar-sign fa-2x"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-md-6">
+                            <div class="card border-0 border-start border-5 border-warning shadow py-2 opacity-75">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col pe-0">
+                                            <div style="font-size: 14px"
+                                                class="fw-semibold text-warning text-uppercase mb-1 text-nowrap">
+                                                Earnings (This Month)
+                                            </div>
+                                            <div class="h5 mb-0 font-weight-bold">
+                                                999
+                                            </div>
+                                        </div>
+                                        <div class="col-auto opacity-25">
+                                            <i class="fas fa-clipboard-list fa-2x"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-xl-12 col-md-12">
+                            <div class="card shadow my-4">
+                                <div
+                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h5 class="m-0 font-weight-bold text-primary">
+                                        <i class="fa-solid fa-chart-simple"></i> Earnings
+                                        Overview
+                                    </h5>
+                                </div>
+                                <div class="card-body p-4">
+                                    <div class="chart-area">
+                                        <canvas id="myChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div th:replace="~{fragments/footer :: footer}"></div>
+        </div>
+    </main>
+
+    <!-- <script>
+        $(() => {
+            let stringData = `<%= earningByYear %>`;
+            stringData = stringData.replace(/&#34;/g, '"');
+
+            const earningByYearData = JSON.parse(stringData);
+            var chartData = {
+                labels: earningByYearData.map((item) => item.year),
+                datasets: [
+                    {
+                        label: 'Earnings',
+                        data: earningByYearData.map((item) => item.earning),
+                        backgroundColor: [
+                            '#FF6384',
+                            '#36A2EB',
+                            '#FFCE56',
+                            '#98AB2F',
+                            '#12CD2F',
+                        ],
+                        borderColor: 'rgba(75,192,192,1)',
+                        borderWidth: 2,
+                    },
+                ],
+            };
+
+            function numberWithCommas(x) {
+                return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            }
+
+            var chartOptions = {
+                responsive: true,
+                labels: false,
+                scales: {
+                    x: {
+                        grid: {
+                            display: false,
+                        },
+                    },
+                    y: {
+                        grid: {
+                            borderDash: [4, 4],
+                            display: true,
+                        },
+                        ticks: {
+                            callback: function (value, index, values) {
+                                return '$' + numberWithCommas(value);
+                            },
+                        },
+                    },
+                },
+                plugins: {
+                    legend: {
+                        display: false,
+                    },
+                },
+            };
+
+            // Lấy tham chiếu đến canvas và vẽ biểu đồ
+            var ctx = document.getElementById('myChart').getContext('2d');
+
+            var myChart = new Chart(ctx, {
+                type: 'line',
+                data: chartData,
+                options: chartOptions,
+            });
+        });
+    </script> -->
+
+</body>
+
+</html>

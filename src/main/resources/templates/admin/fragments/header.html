@@ -1,0 +1,115 @@
+<th:block th:fragment="header">
+    <style>
+        @media screen and (min-width: 900px) {
+            #sidebar:not(.hide)~#content {
+                padding-left: 280px;
+            }
+        }
+
+        #sidebar.hide {
+            transform: translateX(-280px);
+        }
+
+        #sidebar,
+        #content {
+            transition: 0.5s;
+        }
+    </style>
+
+    <script>
+        $(() => {
+            $('#toggle-btn').click(() => {
+                $('#sidebar').toggleClass('hide');
+            });
+
+            $('#close-sidebar-btn').click(() => {
+                $('#sidebar').addClass('hide');
+            });
+        });
+    </script>
+
+    <header class="p-3 border-bottom">
+        <div class="container">
+            <div class="d-flex flex-wrap align-items-center justify-content-center">
+                <span class="d-flex align-items-center mb-lg-0 link-body-emphasis text-decoration-none me-auto"
+                    style="cursor: pointer; font-size: 24px" id="toggle-btn">
+                    <i class="fa-solid fa-bars"></i>
+                </span>
+
+                <div class="form-check form-switch mb-0 me-4">
+                    <input class="form-check-input" type="checkbox" role="switch" id="darkMode"
+                        th:checked="${session.darkmode != null and session.darkmode}" />
+                    <label class="form-check-label" for="darkMode">
+                        <i th:if="${session.darkmode != null and session.darkmode}" id="dark-mode-icon"
+                            class="fa-solid fa-moon fa-lg"></i>
+                        <i th:if="${session.darkmode == null or not session.darkmode}" id="dark-mode-icon"
+                            class="fa-solid fa-sun fa-lg"></i>
+                    </label>
+                </div>
+
+                <div th:if="${#authentication.name != 'anonymousUser'}" class="dropdown text-end">
+                    <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <img th:src="@{${loginUser.avatar}}" alt="avatar" width="32" height="32"
+                            class="rounded-circle" />
+                    </a>
+                    <ul class="dropdown-menu text-small">
+                        <li>
+                            <a class="dropdown-item" th:href="@{/order}">
+                                <span style="width: 20px" class="d-inline-flex justify-content-center me-2">
+                                    <i class="fa-solid fa-table"></i></span>Orders</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" th:href="@{/cart}"><span style="width: 20px"
+                                    class="d-inline-flex justify-content-center me-2"><i
+                                        class="fa-solid fa-cart-shopping"></i></span>Cart
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" th:href="@{/user}"><span style="width: 20px"
+                                    class="d-inline-flex justify-content-center me-2"><i
+                                        class="fa-solid fa-user"></i></span>Profile</a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider" />
+                        </li>
+                        <li>
+                            <a id="logout" class="dropdown-item" href="#">
+                                <span style="width: 20px" class="d-inline-flex justify-content-center me-2">
+                                    <i class="fa-solid fa-right-from-bracket"></i></span>Logout
+                            </a>
+                            <form th:action="@{/auth/logout}" method="post" class="d-none" id="logout-form"></form>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <script>
+        $(() => {
+            // handle darkmode
+            $('#darkMode').change(async (e) => {
+                const darkMode = $('#darkMode').is(':checked');
+                const response = await fetch(`/utils/darkmode?isDark=${darkMode}`);
+                const result = await response.json();
+                if (result === true) {
+                    if (darkMode) {
+                        $('html').attr('data-bs-theme', 'dark');
+                        $('#dark-mode-icon').removeClass('fa-sun').addClass('fa-moon');
+                    } else {
+                        $('html').attr('data-bs-theme', 'light');
+                        $('#dark-mode-icon').removeClass('fa-moon').addClass('fa-sun');
+                    }
+                }
+            });
+
+            // logout
+            $('#logout').click(e => {
+                e.preventDefault();
+                $("#logout-form").submit();
+            })
+        });
+    </script>
+
+</th:block>

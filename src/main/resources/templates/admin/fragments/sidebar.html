@@ -1,0 +1,80 @@
+<th:block th:fragment="sidebar">
+    <style>
+        @media screen and (min-width: 900px) {
+            #close-sidebar-btn {
+                display: none;
+            }
+        }
+    </style>
+
+    <div class="flex-column flex-shrink-0 bg-body-tertiary p-3 position-fixed vh-100" style="width: 280px; z-index: 1"
+        id="sidebar">
+        <div class="d-flex align-items-center">
+            <a href="#" class="d-flex align-items-center me-auto link-body-emphasis text-decoration-none text-nowrap">
+                <img class="me-2" style="width: 38px" th:src="@{/favicon.png}" alt="Book icon" />
+                <span style="font-size: 24px" class="me-auto">Bookstore</span>
+            </a>
+            <button id="close-sidebar-btn" type="button" class="btn-close" aria-label="Close"></button>
+        </div>
+        <hr class="mb-3" style="margin-top: 10px" />
+        <ul id="sidebar-nav" class="nav nav-pills flex-column mb-auto">
+            <li>
+                <!-- class = active or link-body-emphasis -->
+                <a th:href="@{/admin/dashboard}" class="nav-link text-nowrap"
+                    th:classappend="${currentPage != null and currentPage == 'dashboard' ? 'active' : 'link-body-emphasis'}">
+                    <span class="me-2"><i class="fa-solid fa-gauge-high" aria-current="page"></i></span>
+                    Dashboard
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/admin/orders}" class="nav-link text-nowrap"
+                    th:classappend="${currentPage != null and currentPage == 'orders' ? 'active' : 'link-body-emphasis'}">
+                    <span class="me-2"><i class="fa-solid fa-table"></i></span>
+                    Orders
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/admin/books}" class="nav-link text-nowrap"
+                    th:classappend="${currentPage != null and currentPage == 'books' ? 'active' : 'link-body-emphasis'}">
+                    <span class="me-2"><i class="fa-solid fa-tags"></i></span>
+                    Books
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/admin/genres}" class="nav-link text-nowrap"
+                    th:classappend="${currentPage != null and currentPage == 'genres' ? 'active' : 'link-body-emphasis'}">
+                    <span class="me-2"><i class="fa-solid fa-bookmark"></i></span>
+                    Genres
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/admin/users}" class="nav-link text-nowrap"
+                    th:classappend="${currentPage != null and currentPage == 'users' ? 'active' : 'link-body-emphasis'}">
+                    <span class="me-2"><i class="fa-solid fa-user"></i></i></span>
+                    Users
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <script>
+        $(() => {
+            if (window.matchMedia('(max-width: 899.5px)').matches) {
+                $('#sidebar').addClass('hide');
+
+                document.addEventListener('click', function (event) {
+                    const sidebar = document.getElementById('sidebar');
+                    const toggle = document.getElementById('toggle-btn');
+
+                    if (!toggle.contains(event.target) && !sidebar.contains(event.target)) {
+                        $('#sidebar').addClass('hide');
+                    }
+                });
+            }
+
+            $('#sidebar-nav li').click((e) => {
+                $('#sidebar-nav li a.active').addClass('link-body-emphasis').removeClass('active');
+            });
+        });
+    </script>
+</th:block>

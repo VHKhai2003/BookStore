@@ -1,5 +1,7 @@
 package com.example.bookstore.service.impl;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -105,6 +107,53 @@ public class OrderServiceImpl implements OrderService {
         cartRepository.deleteAll(carts);
 
         return order.getId();
+    }
+
+    @Override
+    public List<Order> getOrdersByDeliveryStatus(String status) {
+        return orderRepository.findByDeliveryStatus(status);
+    }
+
+    @Override
+    public Float getEarningCurrentYear(List<Order> orders) {
+        float earning = 0;
+        int currentYear = (new Date()).getYear();
+        for (Order order : orders) {
+            if (order.getOrderDate().getYear() == currentYear) {
+                earning = earning + order.getTotalAmount();
+            }
+        }
+        return (float) Math.round(earning * 100) / 100;
+    }
+
+    @Override
+    public Float getEarningCurrentMonth(List<Order> orders) {
+        float earning = 0;
+        Date today = new Date();
+        int currentYear = today.getYear();
+        int currentMonth = today.getMonth();
+        for (Order order : orders) {
+            if (order.getOrderDate().getYear() == currentYear && order.getOrderDate().getMonth() == currentMonth) {
+                earning = earning + order.getTotalAmount();
+            }
+        }
+        return (float) Math.round(earning * 100) / 100;
+    }
+
+    @Override
+    public List<Float> getEarningEachYear(List<Order> orders) {
+        List<Float> earnings = new ArrayList<>();
+        int currentYear = (new Date()).getYear();
+        for (int i = currentYear - 4; i <= currentYear; i++) {
+            float sum = 0;
+            for (Order order : orders) {
+                if (order.getOrderDate().getYear() == i) {
+                    sum = sum + order.getTotalAmount();
+                }
+            }
+            earnings.add(sum);
+        }
+        return earnings;
     }
 
 }

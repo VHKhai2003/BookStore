@@ -1,5 +1,6 @@
 package com.example.bookstore.repository;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
@@ -13,4 +14,8 @@ public interface BookRepository extends JpaRepository<Book, UUID> {
 	Page<Book> findByTitleContainingIgnoreCaseAndGenre(String title, Genre genre, Pageable pageable);
 
 	Page<Book> findByTitleContainingIgnoreCase(String title, Pageable pageable);
+
+	List<Book> findByStatusIgnoreCase(String status);
+
+	long countByStatusIgnoreCase(String status);
 }

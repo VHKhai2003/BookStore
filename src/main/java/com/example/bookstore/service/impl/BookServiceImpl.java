@@ -1,5 +1,6 @@
 package com.example.bookstore.service.impl;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,17 @@ public class BookServiceImpl implements BookService {
     public Book getBookInfo(UUID id) {
         Book book = bookRepository.findById(id).orElseThrow(() -> new CustomException(404, "Book not found"));
         return book;
+    }
+
+    @Override
+    public List<Book> getAllBooks() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getAllBooks'");
+    }
+
+    @Override
+    public Long getNumberOfBooks() {
+        return bookRepository.countByStatusIgnoreCase("Active");
     }
 
 }

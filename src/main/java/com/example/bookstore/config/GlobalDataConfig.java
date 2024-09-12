@@ -45,13 +45,18 @@ public class GlobalDataConfig {
 	}
 
 	@ModelAttribute("numCart")
-	public Integer getNumberItemInCart(Model model) {
-		UserDto userInfo = (UserDto) model.getAttribute("loginUser");
-		if (userInfo != null) {
-			List<CartDto> carts = cartService.getCartOfUser(userInfo.getId());
-			Integer numberOfItem = carts.size();
-			if (numberOfItem > 0) {
-				return numberOfItem;
+	public Integer getNumberItemInCart(Model model, HttpServletRequest request) {
+		
+//		the number of admins is small, so don't need to check
+		if(!request.getRequestURI().startsWith("/admin")) {
+			
+			UserDto userInfo = (UserDto) model.getAttribute("loginUser");
+			if (userInfo != null) {
+				List<CartDto> carts = cartService.getCartOfUser(userInfo.getId());
+				Integer numberOfItem = carts.size();
+				if (numberOfItem > 0) {
+					return numberOfItem;
+				}
 			}
 		}
 		return null;

@@ -16,4 +16,12 @@ public interface OrderService {
     boolean updateRecipentInfo(UUID orderId, RecipientDto recipient);
 
     UUID placeOrder(RecipientDto recipientDto, UserDto userDto);
+
+    List<Order> getOrdersByDeliveryStatus(String status);
+
+    Float getEarningCurrentYear(List<Order> orders);
+
+    Float getEarningCurrentMonth(List<Order> orders);
+
+    List<Float> getEarningEachYear(List<Order> orders);
 }

@@ -59,6 +59,11 @@ public class CartServiceImpl implements CartService {
         Book book = bookRepository.findById(cartDto.getBookId())
                 .orElseThrow(() -> new CustomException(404, "Book not found"));
 
+        //check book status
+        if (!book.getStatus().equalsIgnoreCase("active")) {
+            throw new CustomException(400, "Bad request");
+        }
+
         // check stock quantity
         if (book.getStockQuantity() < cartDto.getQuantity()) {
             return false;

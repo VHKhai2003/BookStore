@@ -11,7 +11,8 @@ import com.example.bookstore.model.Book;
 import com.example.bookstore.model.Genre;
 
 public interface BookRepository extends JpaRepository<Book, UUID> {
-	Page<Book> findByTitleContainingIgnoreCaseAndGenre(String title, Genre genre, Pageable pageable);
+	Page<Book> findByTitleContainingIgnoreCaseAndGenreAndStatusIgnoreCase(String title, Genre genre, String status,
+			Pageable pageable);
 
 	Page<Book> findByTitleContainingIgnoreCase(String title, Pageable pageable);
 

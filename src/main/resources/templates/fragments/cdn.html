@@ -1,4 +1,4 @@
-<th:block th:fragment="bootstrap-fontawesome-jquery">
+<th:block th:fragment="main-cdn">
     <!-- BOOSTRAP -->
     <link rel="stylesheet" th:href="@{/bootstrap/bootstrap.min.css}">
     <script th:src="@{/bootstrap/bootstrap.bundle.min.js}"></script>
@@ -12,4 +12,11 @@
     <!-- TOASTR -->
     <link rel="stylesheet" th:href="@{/toastr/toastr.min.css}" />
     <script th:src="@{/toastr/toastr.min.js}"></script>
+</th:block>
+
+<!-- Datatable -->
+<th:block th:fragment="datatable">
+    <link rel="stylesheet" th:href="@{/datatable/style.min.css}">
+    <script th:src="@{/datatable/simple-datatables.min.js}"></script>
+    <link rel="stylesheet" th:href="@{/datatable/datatable.css}">
 </th:block>

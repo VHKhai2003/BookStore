@@ -28,7 +28,10 @@ public class BookServiceImpl implements BookService {
         Page<Book> data = null;
         if (genre != null && !genre.equals("all")) {
             Genre genreObj = Genre.builder().id(UUID.fromString(genre)).build();
-            data = bookRepository.findByTitleContainingIgnoreCaseAndGenre(keyword, genreObj, pageable);
+            // find by title, genre
+            // status = active
+            data = bookRepository.findByTitleContainingIgnoreCaseAndGenreAndStatusIgnoreCase(keyword, genreObj,
+                    "active", pageable);
         } else {
             data = bookRepository.findByTitleContainingIgnoreCase(keyword, pageable);
         }

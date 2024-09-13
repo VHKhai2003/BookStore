@@ -34,4 +34,11 @@ public class AdminController {
         model.addAttribute("currentPage", "dashboard");
         return "admin/dashboard";
     }
+
+    @GetMapping("/books")
+    public String getAllBooks(Model model) {
+        model.addAttribute("books", bookService.getAllBooks());
+        model.addAttribute("currentPage", "books");
+        return "admin/books";
+    }
 }

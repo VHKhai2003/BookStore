@@ -33,7 +33,7 @@ public class BookServiceImpl implements BookService {
             data = bookRepository.findByTitleContainingIgnoreCaseAndGenreAndStatusIgnoreCase(keyword, genreObj,
                     "active", pageable);
         } else {
-            data = bookRepository.findByTitleContainingIgnoreCase(keyword, pageable);
+            data = bookRepository.findByTitleContainingIgnoreCaseAndStatusIgnoreCase(keyword, "active", pageable);
         }
         return new PaginationDto<Book>(data.getNumber() + 1, data.getSize(), data.getTotalElements(),
                 data.getTotalPages(),
@@ -43,13 +43,16 @@ public class BookServiceImpl implements BookService {
     @Override
     public Book getBookInfo(UUID id) {
         Book book = bookRepository.findById(id).orElseThrow(() -> new CustomException(404, "Book not found"));
+        // check book status
+        if (!book.getStatus().equalsIgnoreCase("active")) {
+            throw new CustomException(400, "Bad request");
+        }
         return book;
     }
 
     @Override
     public List<Book> getAllBooks() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getAllBooks'");
+        return bookRepository.findByStatusIgnoreCase("active");
     }
 
     @Override

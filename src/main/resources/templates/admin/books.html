@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en" th:data-bs-theme="${session.darkmode != null and session.darkmode ? 'dark' : 'light'}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <th:block th:replace="~{fragments/cdn :: main-cdn}"></th:block>
+    <th:block th:replace="~{fragments/cdn :: datatable}"></th:block>
+    <title>BookStore</title>
+    <style>
+        .one-line-ellipsis {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            /* Number of lines to show */
+            -webkit-box-orient: vertical;
+        }
+
+        .two-line-ellipsis {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            /* Number of lines to show */
+            -webkit-box-orient: vertical;
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="d-flex flex-nowrap h-100">
+        <div th:replace="~{admin/fragments/sidebar :: sidebar}"></div>
+
+        <div id="content" class="w-100 h-100">
+            <div th:replace="~{admin/fragments/header :: header}"></div>
+
+            <div class="bg-body-secondary p-3">
+                <div class="container">
+                    <!-- Change the content of page here -->
+                    <div class="row g-3">
+                        <div class="col-xl-12 col-md-12">
+                            <div class="card shadow">
+                                <div
+                                    class="bg-body-dark card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h4 class="m-0 text-nowrap">
+                                        <i class="fa-solid fa-book"></i> BOOKS
+                                    </h4>
+                                    <div class="w-100 d-flex justify-content-end">
+                                        <a th:href="@{/admin/books/add}"
+                                            class="btn btn-primary fw-semibold text-uppercase">
+                                            <i class="fa-solid fa-circle-plus me-1"></i>
+                                            NEW BOOK
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="card-body px-3 py-2">
+                                    <div class="datatable-area scroll-container overflow-auto">
+                                        <table id="datatablesSimple">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-nowrap"># &nbsp;&nbsp;</th>
+                                                    <th>Name</th>
+                                                    <th>Author</th>
+                                                    <th>Genre</th>
+                                                    <th>Stock&nbsp;&nbsp;</th>
+                                                    <th>Price</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tfoot>
+                                                <tr>
+                                                    <th># &nbsp;&nbsp;</th>
+                                                    <th>Name</th>
+                                                    <th>Author</th>
+                                                    <th>Category</th>
+                                                    <th>Stock</th>
+                                                    <th>Price</th>
+                                                    <th></th>
+                                                </tr>
+                                            </tfoot>
+                                            <tbody>
+                                                <tr th:each="book,iterStat : ${books}">
+                                                    <td th:text="${iterStat.index + 1}"></td>
+                                                    <td>
+                                                        <span class="two-line-ellipsis" th:title="${book.title}"
+                                                            th:text="${book.title}">
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <span class="one-line-ellipsis" th:title="${book.author}"
+                                                            th:text="${book.author}">
+                                                        </span>
+                                                    </td>
+                                                    <td th:text="${book.genre.name}"></td>
+                                                    <td th:text="${book.stockQuantity}"></td>
+                                                    <td th:text="${book.price}"></td>
+                                                    <td>
+                                                        <div class="text-nowrap">
+                                                            <a class="btn btn-primary py-1"
+                                                                th:href="@{/admin/books/edit/{id}(id=${book.id})}">
+                                                                <i class="fas fa-edit"></i>
+                                                            </a>
+
+                                                            <button class="btn btn-danger py-1" data-bs-toggle="modal"
+                                                                data-bs-target="#deleteModal"
+                                                                th:data-bs-id="${book.id}">
+                                                                <i class="fa-solid fa-trash-can"></i>
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div th:replace="~{fragments/footer :: footer}"></div>
+        </div>
+
+        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="deleteModalLabel">Are you sure?</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">The product will be deleted permanently!</div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Cancel
+                        </button>
+                        <button id="delete-book-btn" type="button" class="btn btn-danger">
+                            Delete
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Delete form -->
+        <form id="delete-book-form" class="visually-hidden" method="POST"></form>
+    </main>
+
+    <script>
+        $(() => {
+            // Data table
+            const datatablesSimple = document.getElementById('datatablesSimple');
+            if (datatablesSimple) {
+                new simpleDatatables.DataTable(datatablesSimple);
+            }
+
+            // Delete product modal
+            const deleteModal = $('#deleteModal');
+            const deleteBtn = $('#delete-book-btn');
+            let bookId;
+            if (deleteModal) {
+                deleteModal.on('show.bs.modal', (event) => {
+                    const button = $(event.relatedTarget);
+                    bookId = button.attr('data-bs-id');
+                });
+            }
+
+            const deleteForm = $('#delete-book-form');
+            deleteBtn.click(function () {
+                deleteForm.attr('action', `/admin/books/delete/${bookId}`);
+                deleteForm.submit();
+            });
+        });
+    </script>
+</body>
+
+</html>

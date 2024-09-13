@@ -60,4 +60,12 @@ public class BookServiceImpl implements BookService {
         return bookRepository.countByStatusIgnoreCase("Active");
     }
 
+    @Override
+    public void deleteBook(UUID id) {
+        Book book = bookRepository.findById(id).orElseThrow(() -> new CustomException(404, "Book not found"));
+        // soft delete
+        book.setStatus("delete");
+        bookRepository.save(book);
+    }
+
 }

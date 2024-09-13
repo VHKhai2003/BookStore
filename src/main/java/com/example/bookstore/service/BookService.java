@@ -14,4 +14,6 @@ public interface BookService {
     List<Book> getAllBooks();
 
     Long getNumberOfBooks();
+
+    void deleteBook(UUID id);
 }

@@ -82,15 +82,11 @@ public class UserServiceImpl implements UserService {
             try {
                 if (!currentAvatarPath.equals(defaultImage)) {
                     // current avatar is not default avatar
-                    String currentExt = currentAvatarPath.substring(currentAvatarPath.lastIndexOf("."));
-                    String updatedExt = newAvatarName.substring(newAvatarName.lastIndexOf("."));
-                    if (!currentExt.equals(updatedExt)) {
-                        Files.deleteIfExists(Paths.get(staticPath, currentAvatarPath).toAbsolutePath());
-                        user.setAvatar(avatarsPrefix + newAvatarName);
-                    }
-                } else {
-                    user.setAvatar(avatarsPrefix + newAvatarName);
+                    // => delete old avatar
+                    Files.deleteIfExists(Paths.get(staticPath, currentAvatarPath).toAbsolutePath());
                 }
+                // set unique name for new avatar image
+                user.setAvatar(avatarsPrefix + System.currentTimeMillis() + newAvatarName);
                 Path path = Paths.get(staticPath, user.getAvatar()).toAbsolutePath();
                 Files.write(path, avatar.getBytes());
             } catch (IOException e) {

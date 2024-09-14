@@ -3,6 +3,7 @@ package com.example.bookstore.service;
 import java.util.List;
 import java.util.UUID;
 
+import com.example.bookstore.dto.BookDto;
 import com.example.bookstore.dto.PaginationDto;
 import com.example.bookstore.model.Book;
 
@@ -16,4 +17,6 @@ public interface BookService {
     Long getNumberOfBooks();
 
     void deleteBook(UUID id);
+
+    UUID addBook(BookDto bookDto);
 }

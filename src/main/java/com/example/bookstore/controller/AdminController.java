@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.bookstore.dto.BookDto;
 import com.example.bookstore.model.Order;
 import com.example.bookstore.service.BookService;
 import com.example.bookstore.service.OrderService;
@@ -56,4 +56,17 @@ public class AdminController {
         session.setAttribute("deleteMessage", "Delete book successfully");
         return "redirect:/admin/books";
     }
+
+    @GetMapping("/books/add")
+    public String addBook(Model model) {
+        model.addAttribute("currentPage", "books");
+        return "admin/books-add";
+    }
+
+    @PostMapping("/books/add")
+    public String handleAddBook(BookDto bookDto) {
+        bookService.addBook(bookDto);
+        return "redirect:/admin/books";
+    }
+
 }

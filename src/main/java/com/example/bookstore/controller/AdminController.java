@@ -64,9 +64,28 @@ public class AdminController {
     }
 
     @PostMapping("/books/add")
-    public String handleAddBook(BookDto bookDto) {
-        bookService.addBook(bookDto);
-        return "redirect:/admin/books";
+    public String handleAddBook(BookDto bookDto, HttpSession session) {
+        UUID bookId = bookService.addBook(bookDto);
+        session.setAttribute("addMessage", "Add new book successfully");
+        return "redirect:/admin/books/detail/" + bookId.toString();
+    }
+
+    @GetMapping("/books/detail/{bookId}")
+    public String viewDetail(@PathVariable UUID bookId, Model model, HttpSession session) {
+        model.addAttribute("addMessage", session.getAttribute("addMessage"));
+        session.removeAttribute("addMessage");
+        model.addAttribute("updateMessage", session.getAttribute("updateMessage"));
+        session.removeAttribute("updateMessage");
+        model.addAttribute("book", bookService.getBookInfo(bookId));
+        model.addAttribute("currentPage", "books");
+        return "admin/books-detail";
+    }
+
+    @PostMapping("/books/update")
+    public String updateBook(BookDto bookDto, HttpSession session) {
+        UUID bookId = bookService.updateBook(bookDto);
+        session.setAttribute("updateMessage", "Update book successfully");
+        return "redirect:/admin/books/detail/" + bookId.toString();
     }
 
 }

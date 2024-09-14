@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en" th:data-bs-theme="${session.darkmode != null and session.darkmode ? 'dark' : 'light'}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <th:block th:replace="~{fragments/cdn :: main-cdn}"></th:block>
+    <title>BookStore</title>
+</head>
+
+<body>
+
+    <main class="d-flex flex-nowrap h-100">
+        <div th:replace="~{admin/fragments/sidebar :: sidebar}"></div>
+
+        <div id="content" class="w-100 h-100">
+            <div th:replace="~{admin/fragments/header :: header}"></div>
+
+            <div class="bg-body-secondary p-3">
+                <div class="container">
+                    <!-- Change the content of page here -->
+                    <div class="row justify-content-center">
+                        <div class="col-12">
+                            <div class="card shadow">
+                                <div
+                                    class="text-bg-primary card-header py-3 d-flex flex-row align-items-center justify-content-center">
+                                    <h2 class="m-0 text-nowrap">
+                                        <i class="fa-solid fa-pen-to-square"></i> BOOK'S INFO
+                                    </h2>
+                                </div>
+                                <div class="card-body p-4">
+                                    <div class="datatable-area">
+                                        <form method="post" th:action="@{/admin/books/update}" class="row g-3"
+                                            id="update-product" enctype="multipart/form-data">
+                                            <input type="hidden" class="form-control" id="book-id" name="id"
+                                                th:value="${book.id}" />
+                                            <div class="col-md-6 col-lg-4">
+                                                <label for="isbn" class="form-label">ISBN</label>
+                                                <input type="text" class="form-control" id="isbn" name="isbn"
+                                                    th:value="${book.isbn}" />
+                                            </div>
+                                            <div class="col-md-6 col-lg-4">
+                                                <label for="title" class="form-label">Title</label>
+                                                <input type="text" class="form-control" id="title" name="title"
+                                                    th:value="${book.title}" />
+                                            </div>
+                                            <div class="col-md-6 col-lg-4">
+                                                <label for="author" class="form-label">Author</label>
+                                                <input type="text" class="form-control" id="author" name="author"
+                                                    th:value="${book.author}" />
+                                            </div>
+                                            <div class="col-md-6 col-lg-4">
+                                                <label for="genre" class="form-label">Genre</label>
+                                                <select name="genre" id="genre" class="form-select">
+                                                    <option th:each="genre : ${genres}" th:value="${genre.id}"
+                                                        th:selected="${book.genre.id.toString() == genre.id.toString()}"
+                                                        th:text="${genre.name}"></option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6 col-lg-4">
+                                                <label for="price" class="form-label">Price</label>
+                                                <input type="number" class="form-control" id="price" name="price"
+                                                    th:value="${book.price}" />
+                                            </div>
+                                            <div class="col-md-6 col-lg-4">
+                                                <label for="quantity" class="form-label">Quantity</label>
+                                                <input type="number" class="form-control" id="quantity"
+                                                    name="stockQuantity" th:value="${book.stockQuantity}" />
+                                            </div>
+                                            <div class="col-12">
+                                                <label for="description" class="form-label">Description</label>
+                                                <textarea class="form-control" id="description" name="description"
+                                                    rows="4" th:text="${book.description}"></textarea>
+                                            </div>
+                                            <div class="col-6">
+                                                <label for="front-cover" class="form-label">
+                                                    Front cover
+                                                </label>
+                                                <input type="file" class="form-control" id="front-cover"
+                                                    name="frontCoverImage" accept="image/*" />
+                                            </div>
+                                            <div class="col-6">
+                                                <label for="back-cover" class="form-label">
+                                                    Back cover
+                                                </label>
+                                                <input type="file" class="form-control" id="back-cover"
+                                                    name="backCoverImage" accept="image/*" />
+                                            </div>
+
+                                            <div class="col-6">
+                                                <div id="preview-front-cover" class="text-center">
+                                                    <img class="shadow d-inline-block img-thumbnail"
+                                                        style="width: 60%; aspect-ratio: 4 / 5; object-fit: cover;"
+                                                        th:src="@{${book.frontCoverImage}}" />
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div id="preview-back-cover" class="text-center">
+                                                    <img class="shadow d-inline-block img-thumbnail"
+                                                        style="width: 60%; aspect-ratio: 4 / 5; object-fit: cover;"
+                                                        th:src="@{${book.backCoverImage}}" />
+                                                </div>
+                                            </div>
+
+                                            <div class="col-12 text-end">
+                                                <button type="submit" class="btn btn-primary px-5 py-2 fw-semibold">
+                                                    SAVE
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div th:replace="~{fragments/footer :: footer}"></div>
+        </div>
+    </main>
+
+    <script>
+        function checkInput(data) {
+            if (data.trim() === '') {
+                return false;
+            }
+            return true;
+        }
+
+        function priceValidate(price) {
+            if (!checkInput(price)) {
+                return false;
+            } else {
+                price = Number.parseFloat(price);
+                if (price <= 0) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function quantityValidate(quantity) {
+            if (!checkInput(quantity)) {
+                return false;
+            } else {
+                const QUANTITY_REGEX = /^[1-9]\d*$/;
+                if (!QUANTITY_REGEX.test(quantity)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function handleBlur(namefield) {
+            $(`#${namefield}`).blur((e) => {
+                const data = e.target.value;
+                handleInput(namefield, data);
+            });
+        }
+
+        function handleInput(namefield, data) {
+            if (data.trim() === '') {
+                $(`#${namefield}`).addClass('is-invalid').removeClass('is-valid');
+                var newDiv = $('<div>', {
+                    class: 'invalid-feedback w-100',
+                    text: `(*) ${namefield[0].toUpperCase() + namefield.substr(1)} is required`,
+                });
+                if ($(`#${namefield}`).parent().find('div').length != 0) {
+                    $(`#${namefield}`).parent().find('div').remove();
+                }
+                $(`#${namefield}`).parent().append(newDiv);
+            } else {
+                $(`#${namefield}`).addClass('is-valid').removeClass('is-invalid');
+            }
+        }
+
+        function handlePriceBlur() {
+            let price = $('#price').val();
+            if (price.trim() === '') {
+                $('#price').addClass('is-invalid').removeClass('is-valid');
+                var newDiv = $('<div>', {
+                    class: 'invalid-feedback w-100',
+                    text: '(*) Price is required',
+                });
+                if ($('#price').parent().find('div').length != 0) {
+                    $('#price').parent().find('div').remove();
+                }
+                $('#price').parent().append(newDiv);
+            } else {
+                price = Number.parseInt(price);
+                if (price <= 0) {
+                    $('#price').addClass('is-invalid').removeClass('is-valid');
+                    var newDiv = $('<div>', {
+                        class: 'invalid-feedback w-100',
+                        text: '(*) Price is a positive number',
+                    });
+                    if ($('#price').parent().find('div').length != 0) {
+                        $('#price').parent().find('div').remove();
+                    }
+                    $('#price').parent().append(newDiv);
+                } else {
+                    $('#price').addClass('is-valid').removeClass('is-invalid');
+                }
+            }
+        }
+
+        function handleQuantityBlur() {
+            const quantity = $('#quantity').val();
+            if (quantity === '') {
+                $('#quantity').addClass('is-invalid').removeClass('is-valid');
+                var newDiv = $('<div>', {
+                    class: 'invalid-feedback w-100',
+                    text: '(*) Quantity is required',
+                });
+                if ($('#quantity').parent().find('div').length != 0) {
+                    $('#quantity').parent().find('div').remove();
+                }
+                $('#quantity').parent().append(newDiv);
+            } else {
+                const QUANTITY_REGEX = /^[1-9]\d*$/;
+                if (!QUANTITY_REGEX.test(quantity)) {
+                    $('#quantity').addClass('is-invalid').removeClass('is-valid');
+                    var newDiv = $('<div>', {
+                        class: 'invalid-feedback w-100',
+                        text: '(*) Quantity is a positive integer',
+                    });
+                    if ($('#quantity').parent().find('div').length != 0) {
+                        $('#quantity').parent().find('div').remove();
+                    }
+                    $('#quantity').parent().append(newDiv);
+                } else {
+                    $('#quantity').addClass('is-valid').removeClass('is-invalid');
+                }
+            }
+        }
+
+        function handleSubmit(isbn, title, author, price, quantity, description) {
+            if (
+                checkInput(isbn) &&
+                checkInput(title) &&
+                priceValidate(price) &&
+                checkInput(author) &&
+                quantityValidate(quantity) &&
+                checkInput(description)
+            ) {
+                return true;
+            }
+            return false;
+        }
+
+        $(() => {
+            handleBlur('isbn');
+            handleBlur('title');
+            handleBlur('author');
+            handleBlur('description');
+            $('#price').blur(handlePriceBlur);
+            $('#quantity').blur(handleQuantityBlur);
+
+            $('#front-cover').change(function (event) {
+                const file = event.target.files[0];
+
+                if (file) {
+                    const reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        const imagePreview = $('#preview-front-cover');
+                        imagePreview.html(`
+                            <img
+                                class="shadow d-inline-block img-thumbnail"
+                                style="
+                                    width: 60%;
+                                    aspect-ratio: 4 / 5;
+                                    object-fit: cover;
+                                "
+                                src="${e.target.result}"
+                            />
+                        `);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            $('#back-cover').change(function (event) {
+                const file = event.target.files[0];
+
+                if (file) {
+                    const reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        const imagePreview = $('#preview-back-cover');
+                        imagePreview.html(`
+                            <img
+                                class="shadow d-inline-block img-thumbnail"
+                                style="
+                                    width: 60%;
+                                    aspect-ratio: 4 / 5;
+                                    object-fit: cover;
+                                "
+                                src="${e.target.result}"
+                            />
+                        `);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            $('#update-product').submit((e) => {
+                const isbn = $('#isbn').val();
+                const title = $('#title').val();
+                const author = $('#author').val();
+                const price = $('#price').val();
+                const quantity = $('#quantity').val();
+                const description = $('#description').val();
+
+                if (!handleSubmit(isbn, title, author, price, quantity, description)) {
+                    e.preventDefault();
+                    handleInput('isbn', isbn);
+                    handleInput('title', title);
+                    handleInput('author', author);
+                    handlePriceBlur();
+                    handleQuantityBlur();
+                    handleInput('description', description);
+                }
+            });
+        });
+    </script>
+
+    <script th:inline="javascript" th:if="${addMessage != null}">
+        toastr.options.timeOut = 5000;
+        toastr.success(/*[[${addMessage}]]*/ '');
+    </script>
+
+    <script th:inline="javascript" th:if="${updateMessage != null}">
+        toastr.options.timeOut = 5000;
+        toastr.success(/*[[${updateMessage}]]*/ '');
+    </script>
+
+</body>
+
+</html>

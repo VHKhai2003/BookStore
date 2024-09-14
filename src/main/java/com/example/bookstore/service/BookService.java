@@ -19,4 +19,6 @@ public interface BookService {
     void deleteBook(UUID id);
 
     UUID addBook(BookDto bookDto);
+
+    UUID updateBook(BookDto bookDto);
 }

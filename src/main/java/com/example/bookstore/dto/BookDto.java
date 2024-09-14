@@ -12,6 +12,7 @@ import lombok.ToString;
 @Setter
 @ToString
 public class BookDto {
+    private UUID id;
     private String author;
     private String title;
     private String description;

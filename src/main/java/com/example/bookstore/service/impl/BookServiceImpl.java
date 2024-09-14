@@ -120,4 +120,44 @@ public class BookServiceImpl implements BookService {
         }
     }
 
+    @Override
+    public UUID updateBook(BookDto bookDto) {
+        Book book = bookRepository.findById(bookDto.getId())
+                .orElseThrow(() -> new CustomException(404, "Book not found"));
+
+        try {
+            // update image
+            MultipartFile frontCover = bookDto.getFrontCoverImage();
+            MultipartFile backCover = bookDto.getBackCoverImage();
+            if (frontCover != null && !frontCover.isEmpty()) {
+                // delete old image, write new image
+                Files.delete(Paths.get(staticPath + book.getFrontCoverImage()).toAbsolutePath());
+                Path frontPath = Paths
+                        .get(staticPath, frontPrefix, System.currentTimeMillis() + frontCover.getOriginalFilename())
+                        .toAbsolutePath();
+                Files.write(frontPath, frontCover.getBytes());
+                book.setFrontCoverImage(frontPrefix + frontPath.getFileName().toString());
+            }
+            if (backCover != null && !backCover.isEmpty()) {
+                Files.delete(Paths.get(staticPath + book.getBackCoverImage()).toAbsolutePath());
+                Path backPath = Paths
+                        .get(staticPath, backPrefix, System.currentTimeMillis() + backCover.getOriginalFilename())
+                        .toAbsolutePath();
+                Files.write(backPath, backCover.getBytes());
+                book.setBackCoverImage(backPrefix + backPath.getFileName().toString());
+            }
+            // update orther fields
+            book.setAuthor(bookDto.getAuthor());
+            book.setTitle(bookDto.getTitle());
+            book.setIsbn(bookDto.getIsbn());
+            book.setGenre(Genre.builder().id(bookDto.getGenre()).build());
+            book.setPrice(bookDto.getPrice());
+            book.setStockQuantity(bookDto.getStockQuantity());
+            book.setDescription(bookDto.getDescription());
+            return bookRepository.save(book).getId();
+        } catch (IOException e) {
+            throw new CustomException(500, e.getMessage());
+        }
+    }
+
 }

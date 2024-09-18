@@ -88,4 +88,10 @@ public class AdminController {
         return "redirect:/admin/books/detail/" + bookId.toString();
     }
 
+    @GetMapping("/genres")
+    public String getAllGenres(Model model) {
+        model.addAttribute("currentPage", "genres");
+        return "admin/genres";
+    }
+
 }

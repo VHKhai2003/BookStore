@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" th:data-bs-theme="${session.darkmode != null and session.darkmode ? 'dark' : 'light'}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <th:block th:replace="~{fragments/cdn :: main-cdn}"></th:block>
+    <th:block th:replace="~{fragments/cdn :: datatable}"></th:block>
+    <title>BookStore</title>
+</head>
+
+<body>
+
+    <main class="d-flex flex-nowrap h-100">
+        <div th:replace="~{admin/fragments/sidebar :: sidebar}"></div>
+
+        <div id="content" class="w-100 h-100">
+            <div th:replace="~{admin/fragments/header :: header}"></div>
+
+            <div class="bg-body-secondary p-3">
+                <div class="container">
+                    <!-- Change the content of page here -->
+                    <div class="row g-3">
+                        <div class="col-xl-12 col-md-12">
+                            <div class="card shadow">
+                                <div
+                                    class="bg-body-dark card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h4 class="m-0 text-nowrap">
+                                        <i class="fa-solid fa-bookmark"></i> GENRES
+                                    </h4>
+                                    <div class="w-100 d-flex justify-content-end">
+                                        <button class="btn btn-primary fw-semibold text-uppercase">
+                                            <i class="fa-solid fa-circle-plus me-1"></i>
+                                            NEW GENRE
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="bg-body-tertiary card-body px-3 py-2">
+                                    <div class="datatable-area scroll-container overflow-auto">
+                                        <table id="datatablesSimple">
+                                            <thead>
+                                                <tr>
+                                                    <th># &nbsp;&nbsp;</th>
+                                                    <th>Name</th>
+                                                    <th>Number of books</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tfoot>
+                                                <tr>
+                                                    <th># &nbsp;&nbsp;</th>
+                                                    <th>Name</th>
+                                                    <th>Number of books</th>
+                                                    <th></th>
+                                                </tr>
+                                            </tfoot>
+                                            <tbody>
+
+                                                <tr th:each="genre, iterStat : ${genres}">
+                                                    <td th:text="${iterStat.index + 1}"></td>
+                                                    <td th:text="${genre.name}"></td>
+                                                    <td th:text="${genre.books.size()}"></td>
+                                                    <td>
+                                                        <div class="text-nowrap text-center">
+                                                            <button class="btn btn-primary py-1">
+                                                                <i class="fas fa-edit"></i>
+                                                            </button>
+
+                                                            <button class="btn btn-danger py-1">
+                                                                <i class="fa-solid fa-trash-can"></i>
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div th:replace="~{fragments/footer :: footer}"></div>
+        </div>
+
+
+    </main>
+
+
+
+    <script>
+        $(() => {
+            // Data table
+            const datatablesSimple = document.getElementById('datatablesSimple');
+            if (datatablesSimple) {
+                new simpleDatatables.DataTable(datatablesSimple);
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -10,10 +10,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.bookstore.dto.BookDto;
+import com.example.bookstore.model.Genre;
 import com.example.bookstore.model.Order;
 import com.example.bookstore.service.BookService;
+import com.example.bookstore.service.GenreService;
 import com.example.bookstore.service.OrderService;
 
 import jakarta.servlet.http.HttpSession;
@@ -27,6 +30,9 @@ public class AdminController {
 
     @Autowired
     private OrderService orderService;
+
+    @Autowired
+    private GenreService genreService;
 
     @GetMapping({ "", "/dashboard" })
     public String getDashBoard(Model model) {
@@ -89,9 +95,35 @@ public class AdminController {
     }
 
     @GetMapping("/genres")
-    public String getAllGenres(Model model) {
+    public String getAllGenres(Model model, HttpSession session) {
         model.addAttribute("currentPage", "genres");
+        model.addAttribute("deleteStatus", session.getAttribute("deleteStatus"));
+        session.removeAttribute("deleteStatus");
+        model.addAttribute("addStatus", session.getAttribute("addStatus"));
+        session.removeAttribute("addStatus");
+        model.addAttribute("updateStatus", session.getAttribute("updateStatus"));
+        session.removeAttribute("updateStatus");
         return "admin/genres";
+    }
+
+    @PostMapping("/genres/add")
+    public String addGenre(Genre genre, HttpSession session) {
+        genreService.addGenre(genre);
+        session.setAttribute("addStatus", true);
+        return "redirect:/admin/genres";
+    }
+
+    @PostMapping("/genres/delete")
+    public String deleteGenre(@RequestParam UUID genreId, HttpSession session) {
+        session.setAttribute("deleteStatus", genreService.deleteGenre(genreId));
+        return "redirect:/admin/genres";
+    }
+
+    @PostMapping("/genres/update")
+    public String updateGenre(Genre genre, HttpSession session) {
+        genreService.update(genre);
+        session.setAttribute("updateStatus", true);
+        return "redirect:/admin/genres";
     }
 
 }

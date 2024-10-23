@@ -29,7 +29,8 @@
                                         <i class="fa-solid fa-bookmark"></i> GENRES
                                     </h4>
                                     <div class="w-100 d-flex justify-content-end">
-                                        <button class="btn btn-primary fw-semibold text-uppercase">
+                                        <button class="btn btn-primary fw-semibold text-uppercase"
+                                            data-bs-toggle="modal" data-bs-target="#createModal">
                                             <i class="fa-solid fa-circle-plus me-1"></i>
                                             NEW GENRE
                                         </button>
@@ -62,11 +63,16 @@
                                                     <td th:text="${genre.books.size()}"></td>
                                                     <td>
                                                         <div class="text-nowrap text-center">
-                                                            <button class="btn btn-primary py-1">
+                                                            <button class="btn btn-primary py-1" data-bs-toggle="modal"
+                                                                data-bs-target="#updateModal"
+                                                                th:data-bs-id="${genre.id}"
+                                                                th:data-bs-name="${genre.name}">
                                                                 <i class="fas fa-edit"></i>
                                                             </button>
 
-                                                            <button class="btn btn-danger py-1">
+                                                            <button class="btn btn-danger py-1" data-bs-toggle="modal"
+                                                                data-bs-target="#deleteModal"
+                                                                th:data-bs-id="${genre.id}">
                                                                 <i class="fa-solid fa-trash-can"></i>
                                                             </button>
                                                         </div>
@@ -86,6 +92,88 @@
         </div>
 
 
+        <!-- Delete modal -->
+        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <form id="delete-genre-form" class="modal-content" method="POST">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    <input type="hidden" th:name="genreId" id="input-delete-genre" />
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="deleteModalLabel">Are you sure?</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        The genre will be deleted permanently and books of this genre will be
+                        set genre to none!
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-cancel" data-bs-dismiss="modal">
+                            Cancel
+                        </button>
+                        <button id="delete-genre-btn" type="button" class="btn btn-danger">
+                            Delete
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Create modal -->
+        <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <form id="create-genre-form" class="modal-content" method="POST" th:action="@{/admin/genres/add}">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="createModalLabel">CREATE NEW GENRE</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-floating">
+                            <input type="text" required class="form-control" id="genre-name-create" name="name"
+                                placeholder="Action" />
+                            <label for="genre-name-create">Genre name</label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Cancel
+                        </button>
+                        <button id="create-genre-btn" type="submit" class="btn btn-primary">
+                            Create
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Update modal -->
+        <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <form id="update-genre-form" class="modal-content" method="POST">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    <input type="hidden" name="id" id="genre-id-update" />
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="updateModalLabel">UPDATE GENRE</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-floating">
+                            <input required type="text" class="form-control" id="genre-name-update" name="name"
+                                placeholder="Action" />
+                            <label for="genre-name-update">Genre name</label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Cancel
+                        </button>
+                        <button id="update-genre-btn" type="button" class="btn btn-primary">
+                            Update
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
     </main>
 
 
@@ -97,7 +185,65 @@
             if (datatablesSimple) {
                 new simpleDatatables.DataTable(datatablesSimple);
             }
+
+            // Delete product modal
+            const deleteModal = $('#deleteModal');
+            const deleteBtn = $('#delete-genre-btn');
+            let deleteGenreId;
+            if (deleteModal) {
+                deleteModal.on('show.bs.modal', (event) => {
+                    const button = $(event.relatedTarget);
+                    deleteGenreId = button.attr('data-bs-id');
+                });
+            }
+
+            const deleteForm = $('#delete-genre-form');
+            deleteBtn.click(function () {
+                deleteForm.attr('action', `/admin/genres/delete`);
+                $('#input-delete-genre').val(deleteGenreId);
+                deleteForm.submit();
+            });
+
+            // Update genre modal
+            const updateModal = $('#updateModal');
+            const updateBtn = $('#update-genre-btn');
+            let updateGenreId;
+            let updateGenreName;
+            if (updateModal) {
+                updateModal.on('show.bs.modal', (event) => {
+                    const button = $(event.relatedTarget);
+                    updateGenreId = button.attr('data-bs-id');
+                    updateGenreName = button.attr('data-bs-name');
+                    $('#update-genre-form #genre-name-update').val(updateGenreName);
+                    $('#update-genre-form #genre-id-update').val(updateGenreId);
+                });
+            }
+
+            const updateForm = $('#update-genre-form');
+            updateBtn.click(function () {
+                updateForm.attr('action', `/admin/genres/update`);
+                updateForm.submit();
+            });
         });
+    </script>
+
+    <script th:inline="javascript" th:if="${deleteStatus != null}">
+        toastr.options.timeOut = 5000;
+        const status = /*[[${deleteStatus}]]*/ '';
+        if (status)
+            toastr.success('Delete genre successfully');
+        else
+            toastr.error('Can not delete this genre');
+    </script>
+
+    <script th:inline="javascript" th:if="${addStatus != null}">
+        toastr.options.timeOut = 5000;
+        toastr.success("Add genre successfully");
+    </script>
+
+    <script th:inline="javascript" th:if="${updateStatus != null}">
+        toastr.options.timeOut = 5000;
+        toastr.success("Update genre successfully");
     </script>
 </body>
 

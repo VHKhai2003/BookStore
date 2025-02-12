@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" th:data-bs-theme="${session.darkmode != null and session.darkmode ? 'dark' : 'light'}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <th:block th:replace="~{fragments/cdn :: main-cdn}"></th:block>
+    <th:block th:replace="~{fragments/cdn :: datatable}"></th:block>
+    <title>BookStore</title>
+</head>
+
+<body>
+
+    <main class="d-flex flex-nowrap h-100">
+        <div th:replace="~{admin/fragments/sidebar :: sidebar}"></div>
+
+        <div id="content" class="w-100 h-100">
+            <div th:replace="~{admin/fragments/header :: header}"></div>
+
+            <div class="bg-body-secondary p-3">
+                <div class="container">
+                    <!-- Change the content of page here -->
+                    <div class="row g-3">
+                        <div class="col-xl-12 col-md-12">
+                            <div class="card shadow">
+                                <div
+                                    class="bg-body-dark card-header py-3 d-flex flex-row align-items-center justify-content-between"
+                                >
+                                    <h4 class="m-0 text-nowrap">
+                                        <i class="fa-solid fa-users"></i> CUSTOMERS
+                                    </h4>
+                                
+                                </div>
+                                <div class="card-body px-3 py-2">
+                                    <div class="datatable-area scroll-container overflow-auto">
+                                        <table id="datatablesSimple">
+                                            <thead>
+                                                <tr>
+                                                    <th># &nbsp;&nbsp;</th>
+                                                    <th>Name</th>
+                                                    <th>Email</th>
+                                                    <th>Phone</th>
+                                                    <th>Address</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr th:each="user, iterStat : ${users}">
+                                                    <td th:text="${iterStat.index + 1}"></td>
+                                                    <td th:text="${user.name}"></td>
+                                                    <td th:text="${user.email}"></td>
+                                                    <td th:text="${user.phoneNumber}"></td>
+                                                    <td th:text="${user.address}"></td>
+                                                    <td>
+                                                        <div class="text-nowrap">
+                                                            <a th:if="${#strings.equals(user.status, 'active')}" 
+                                                                class="btn btn-success py-1 btn-block-unblock"
+                                                                th:href="@{/admin/users/{id}/block(id=${user.id})}">
+                                                                <i class="fa-solid fa-lock mx-1"></i>
+                                                            </a>
+                                                            <a th:if="${#strings.equals(user.status, 'inactive')}" 
+                                                                class="btn btn-danger py-1 btn-block-unblock"
+                                                                th:href="@{/admin/users/{id}/unblock(id=${user.id})}">
+                                                                <i class="fa-solid fa-lock-open ms-1"></i>
+                                                            </a>
+                                                            <a class="btn btn-primary py-1"
+                                                                title="Detail"
+                                                                th:href="@{/admin/users/{id}/profile(id=${user.id})}">
+                                                                <i
+                                                                    class="fa-solid fa-eye"
+                                                                    style="
+                                                                        margin-left: 2px;
+                                                                        margin-right: 2px;
+                                                                    "
+                                                                ></i>
+                                                            </a>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div th:replace="~{fragments/footer :: footer}"></div>
+        </div>
+
+
+
+    </main>
+
+
+
+    <script>
+        $(() => {
+            // Data table
+            const datatablesSimple = document.getElementById('datatablesSimple');
+            if (datatablesSimple) {
+                new simpleDatatables.DataTable(datatablesSimple);
+            }
+
+
+            let btnBlock = $('.btn-block-unblock');
+            btnBlock.click(async (e) => {
+                e.preventDefault();
+
+                const aItem = $(e.target).parents('.btn-block-unblock').attr('href')
+                    ? $(e.target).parents('.btn-block-unblock')
+                    : $(e.target);
+                let fetchUrl = aItem.attr('href');
+
+                const isBlock = fetchUrl.indexOf('unblock') === -1;
+
+                const response = await fetch(fetchUrl);
+                const data = await response.json();
+                if (data) {
+                    toastr.options.timeOut = 3000;
+                    aItem.toggleClass('btn-success');
+                    aItem.toggleClass('btn-danger');
+                    aItem.find('i').toggleClass('fa-lock-open');
+                    aItem.find('i').toggleClass('fa-lock');
+                    aItem.find('i').toggleClass('mx-1');
+                    aItem.find('i').toggleClass('ms-1');
+                    if (isBlock) {
+                        aItem.attr('href', fetchUrl.replace('block', 'unblock'));
+                        toastr.success('Block customer successfully');
+                    } else {
+                        aItem.attr('href', fetchUrl.replace('unblock', 'block'));
+                        toastr.success('Unblock customer successfully');
+                    }
+                } else {
+                    toastr.options.timeOut = 3000;
+                    if (isBlock) toastr.error('Fail to block customer');
+                    else toastr.error('Fail to unblock customer');
+                }
+            });
+        });
+    </script>
+
+    <script th:inline="javascript" th:if="${deleteStatus != null}">
+        toastr.options.timeOut = 5000;
+        const status = /*[[${deleteStatus}]]*/ '';
+        if (status)
+            toastr.success('Delete genre successfully');
+        else
+            toastr.error('Can not delete this genre');
+    </script>
+</body>
+
+</html>

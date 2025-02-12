@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -98,6 +100,34 @@ public class UserServiceImpl implements UserService {
         user.setEmail(userDto.getEmail());
         user.setPhoneNumber(userDto.getPhoneNumber());
         userRepository.save(user);
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    @Override
+    public void blockUser(UUID id) {
+        User user = userRepository.findById(id)
+            .orElseThrow(() -> new CustomException(404, "User not found"));
+        user.setStatus("inactive");
+        userRepository.save(user);
+    }
+
+    @Override
+    public void unblockUser(UUID id) {
+        User user = userRepository.findById(id)
+            .orElseThrow(() -> new CustomException(404, "User not found"));
+        user.setStatus("active");
+        userRepository.save(user);
+    }
+
+    @Override
+    public User getUserById(UUID id) {
+        User user = userRepository.findById(id)
+            .orElseThrow(() -> new CustomException(404, "User not found"));
+        return user;
     }
 
 }

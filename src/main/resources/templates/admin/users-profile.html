@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" th:data-bs-theme="${session.darkmode != null and session.darkmode ? 'dark' : 'light'}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <th:block th:replace="~{fragments/cdn :: main-cdn}"></th:block>
+    <th:block th:replace="~{fragments/cdn :: datatable}"></th:block>
+    <title>BookStore</title>
+</head>
+
+<body>
+
+    <main class="d-flex flex-nowrap h-100">
+        <div th:replace="~{admin/fragments/sidebar :: sidebar}"></div>
+
+        <div id="content" class="w-100 h-100">
+            <div th:replace="~{admin/fragments/header :: header}"></div>
+
+            <div class="bg-body-secondary p-3">
+                <div class="container">
+                    <!-- Change the content of page here -->
+                    <div class="row justify-content-center">
+                        <div class="col-12">
+                            <div class="card row g-0 border rounded overflow-hidden flex-md-row shadow">
+                                <div class="col col-12 col-md-5 col-xl-4 d-lg-block">
+                                    <img
+                                        th:src="@{${user.avatar}}"
+                                        class="w-100 h-100 shadow"
+                                        style="object-fit: cover"
+                                        id="img-avatar"
+                                        role="button"
+                                    />
+                                </div>
+                                <form method="post" th:action="@{/admin/{id}/profile(id=${user.id})}" class="col col-12 col-md-7 col-xl-8 px-4 py-3 d-flex flex-column">
+                                    <h1 class="d-inline-block mb-2 text-primary-emphasis">Profile</h1>
+                                    <div class="form-floating mb-2">
+                                        <input
+                                            class="form-control border-info"
+                                            required
+                                            name="name"
+                                            id="name"
+                                            th:value="${user.name}"
+                                            spellcheck="false"
+                                            disabled
+                                        />
+                                        <label for="name">Name</label>
+                                    </div>
+                                    <div class="form-floating mb-2">
+                                        <input
+                                            class="form-control border-info"
+                                            type="email"
+                                            required
+                                            name="email"
+                                            id="email"
+                                            th:value="${user.email}"
+                                            spellcheck="false"
+                                            disabled
+                                        />
+                                        <label for="email">Email</label>
+                                    </div>
+                                    <div class="form-floating mb-2">
+                                        <input
+                                            class="form-control border-info"
+                                            id="phone"
+                                            required
+                                            th:value="${user.phoneNumber}"
+                                            spellcheck="false"
+                                            disabled
+                                        />
+                                        <label for="phone">Phone</label>
+                                    </div>
+                                    <div class="form-floating mb-3">
+                                        <input
+                                            class="form-control border-info"
+                                            name="address"
+                                            id="address"
+                                            th:value="${user.address}"
+                                            spellcheck="false"
+                                            disabled
+                                        />
+                                        <label for="address">Address</label>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="form-floating col-6 col-lg-3 mb-3">
+                                            <select name="role" id="role" class="form-select">
+                                                <option value="1" th:selected="${user.role.id == 1}">Customer</option>
+                                                <option value="2" th:selected="${user.role.id == 2}">Admin</option>
+                                            </select>
+                                            <label class="ms-2" for="role">Role</label>
+                                        </div>
+
+                                        <div class="form-floating col-6 col-lg-3 mb-3">
+                                            <select name="status" id="status" class="form-select">
+                                                <option value="active" th:selected="${#strings.equals(user.status, 'active')}">Active</option>
+                                                <option value="block" th:selected="${#strings.equals(user.status, 'inactive')}">Blocked</option>
+                                            </select>
+                                            <label class="ms-2" for="status">Status</label>
+                                        </div>
+                                    </div>
+    
+                                    <div class="text-end">
+                                        <a class="btn btn-secondary" th:href="@{/admin/users}">
+                                            &nbsp;&nbsp;&nbsp;&nbsp; Cancel &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        </a>
+                                        <a class="btn btn-primary" th:href="@{/admin/users}">
+                                            Save changes
+                                        </a>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div th:replace="~{fragments/footer :: footer}"></div>
+        </div>
+
+
+
+    </main>
+
+
+
+    <script>
+        $(() => {
+            // Data table
+            const datatablesSimple = document.getElementById('datatablesSimple');
+            if (datatablesSimple) {
+                new simpleDatatables.DataTable(datatablesSimple);
+            }
+
+
+        });
+    </script>
+
+</body>
+
+</html>

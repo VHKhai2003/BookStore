@@ -67,6 +67,10 @@
     </script>
 
     <script th:if="${param.error != null}" th:inline="javascript">
+        const param = /*[[${[param]}]]*/ '';
+        if(param.error[0] == 'blocked') {
+            $('#notification i').html('User was blocked');
+        }
         $('#notification').css('visibility', 'visible');
         $('#input-username').on('input', (e) => {
             $('#notification').css('visibility', 'hidden');

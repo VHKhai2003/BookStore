@@ -1,5 +1,6 @@
 package com.example.bookstore.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,6 +14,13 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @SuppressWarnings({ "deprecation", "removal" })
 public class SecurityConfig {
+
+    @Autowired
+    CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
+
+    @Autowired
+    CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests(authz -> authz
@@ -23,7 +31,9 @@ public class SecurityConfig {
                 .requestMatchers("/admin/**").hasRole("Admin")
                 .anyRequest().authenticated())
                 .formLogin(form -> form.loginPage("/auth/login")
-                        .defaultSuccessUrl("/", false).permitAll())
+                        .successHandler(customAuthenticationSuccessHandler)
+                        .failureHandler(customAuthenticationFailureHandler)
+                        .permitAll())
                 .logout(logout -> logout.logoutUrl("/auth/logout").logoutSuccessUrl("/").permitAll());
         return http.build();
     }

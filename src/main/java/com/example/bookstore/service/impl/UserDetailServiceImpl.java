@@ -1,6 +1,7 @@
 package com.example.bookstore.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,6 +20,9 @@ public class UserDetailServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(username + " not found!"));
+        if(!user.getStatus().equalsIgnoreCase("active")) {
+            throw new DisabledException("User was blocked");
+        }
         System.out.println(user.getUsername() + " ---  " + user.getRole().getName());
         return org.springframework.security.core.userdetails.User.builder()
                 .username(user.getUsername())

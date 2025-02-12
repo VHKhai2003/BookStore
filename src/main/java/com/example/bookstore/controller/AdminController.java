@@ -18,6 +18,7 @@ import com.example.bookstore.model.Order;
 import com.example.bookstore.service.BookService;
 import com.example.bookstore.service.GenreService;
 import com.example.bookstore.service.OrderService;
+import com.example.bookstore.service.UserService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -33,6 +34,9 @@ public class AdminController {
 
     @Autowired
     private GenreService genreService;
+
+    @Autowired
+    private UserService userService;
 
     @GetMapping({ "", "/dashboard" })
     public String getDashBoard(Model model) {
@@ -125,5 +129,20 @@ public class AdminController {
         session.setAttribute("updateStatus", true);
         return "redirect:/admin/genres";
     }
+
+    @GetMapping("/users")
+    public String getAllUsers(Model model) {
+        model.addAttribute("currentPage", "users");
+        model.addAttribute("users", userService.getAllUsers());
+        return "/admin/users";
+    }
+    
+    @GetMapping("/users/{id}/profile")
+    public String viewUserProfile(@PathVariable UUID id, Model model) {
+        model.addAttribute("currentPage", "users");
+        model.addAttribute("user", userService.getUserById(id));
+        return "/admin/users-profile";
+    }
+    
 
 }

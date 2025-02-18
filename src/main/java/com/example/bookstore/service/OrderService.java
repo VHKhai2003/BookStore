@@ -17,11 +17,15 @@ public interface OrderService {
 
     UUID placeOrder(RecipientDto recipientDto, UserDto userDto);
 
-    List<Order> getOrdersByDeliveryStatus(String status);
+    List<Order> getPayedOrders();
 
     Float getEarningCurrentYear(List<Order> orders);
 
     Float getEarningCurrentMonth(List<Order> orders);
 
     List<Float> getEarningEachYear(List<Order> orders);
+
+    List<Order> getAllOrders();
+
+    void updateDeliveryStatus(UUID id, String newStatus);
 }

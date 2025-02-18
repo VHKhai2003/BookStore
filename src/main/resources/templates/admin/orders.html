@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" th:data-bs-theme="${session.darkmode != null and session.darkmode ? 'dark' : 'light'}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <th:block th:replace="~{fragments/cdn :: main-cdn}"></th:block>
+    <th:block th:replace="~{fragments/cdn :: datatable}"></th:block>
+    <title>BookStore</title>
+</head>
+
+<body>
+
+    <main class="d-flex flex-nowrap h-100">
+        <div th:replace="~{admin/fragments/sidebar :: sidebar}"></div>
+
+        <div id="content" class="w-100 h-100">
+            <div th:replace="~{admin/fragments/header :: header}"></div>
+
+            <div class="bg-body-secondary p-3">
+                <div class="container">
+                    <!-- Change the content of page here -->
+                    <div class="row g-3">
+                        <div class="col-xl-12 col-md-12">
+                            <div class="card shadow">
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h4 class="m-0">
+                                        <i class="fa-solid fa-table"></i> ORDERS
+                                    </h4>
+                                </div>
+                                <div class="card-body px-3 py-2">
+                                    <div class="datatable-area scroll-container overflow-auto">
+                                        <table id="datatablesSimple">
+                                            <thead>
+                                                <tr>
+                                                    <th># &nbsp;&nbsp;</th>
+                                                    <th>Name</th>
+                                                    <th>Phone</th>
+                                                    <th>Adress</th>
+                                                    <th>Status</th>
+                                                    <th>Total</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr th:each="order, iterStat : ${orders}">
+                                                    <td th:text="${iterStat.index + 1}"></td>
+                                                    <td th:text="${order.orderBy.name}"></td>
+                                                    <td th:text="${order.phoneNumber}"></td>
+                                                    <td th:text="${order.deliveryAddress}"></td>
+                                                    <td>
+                                                        <span th:text="${order.deliveryStatus}" 
+                                                            th:class="${
+                                                                order.deliveryStatus == 'Payed' || order.deliveryStatus == 'Processing' || order.deliveryStatus == 'Shipping'
+                                                                    ? 'text-primary'
+                                                                    : (order.deliveryStatus == 'Shipped' ? 'text-success' : (order.deliveryStatus == 'Pending' ? '' : 'text-danger'))
+                                                            }"
+                                                        ></span>
+                                                    </td>
+                                                    <td th:text="${order.totalAmount}"></td>
+                                                    <td>
+                                                        <a class="btn btn-primary py-1"
+                                                            th:href="@{/admin/orders/{id}/detail(id=${order.id})}">
+                                                            <i class="fas fa-edit"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div th:replace="~{fragments/footer :: footer}"></div>
+        </div>
+
+
+
+    </main>
+
+
+
+    <script>
+        $(() => {
+            // Data table
+            const datatablesSimple = document.getElementById('datatablesSimple');
+            if (datatablesSimple) {
+                new simpleDatatables.DataTable(datatablesSimple);
+            }
+        });
+    </script>
+
+</body>
+
+</html>

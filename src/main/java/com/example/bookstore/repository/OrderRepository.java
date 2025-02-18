@@ -11,5 +11,5 @@ import com.example.bookstore.model.User;
 public interface OrderRepository extends JpaRepository<Order, UUID> {
     List<Order> findByOrderBy(User user);
 
-    List<Order> findByDeliveryStatus(String deliveryStatus);
+    List<Order> findByDeliveryStatusNotIn(String... statuses);
 }

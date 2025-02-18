@@ -23,13 +23,10 @@
                     <div class="row g-3">
                         <div class="col-xl-12 col-md-12">
                             <div class="card shadow">
-                                <div
-                                    class="bg-body-dark card-header py-3 d-flex flex-row align-items-center justify-content-between"
-                                >
+                                <div class="bg-body-dark card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                     <h4 class="m-0 text-nowrap">
                                         <i class="fa-solid fa-users"></i> CUSTOMERS
                                     </h4>
-                                
                                 </div>
                                 <div class="card-body px-3 py-2">
                                     <div class="datatable-area scroll-container overflow-auto">
@@ -89,8 +86,6 @@
             <div th:replace="~{fragments/footer :: footer}"></div>
         </div>
 
-
-
     </main>
 
 
@@ -102,7 +97,6 @@
             if (datatablesSimple) {
                 new simpleDatatables.DataTable(datatablesSimple);
             }
-
 
             let btnBlock = $('.btn-block-unblock');
             btnBlock.click(async (e) => {
@@ -139,15 +133,6 @@
                 }
             });
         });
-    </script>
-
-    <script th:inline="javascript" th:if="${deleteStatus != null}">
-        toastr.options.timeOut = 5000;
-        const status = /*[[${deleteStatus}]]*/ '';
-        if (status)
-            toastr.success('Delete genre successfully');
-        else
-            toastr.error('Can not delete this genre');
     </script>
 </body>
 

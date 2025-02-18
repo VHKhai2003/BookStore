@@ -7,15 +7,18 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.bookstore.dto.RecipientDto;
 import com.example.bookstore.dto.UserDto;
 import com.example.bookstore.exception.CustomException;
+import com.example.bookstore.model.Book;
 import com.example.bookstore.model.Cart;
 import com.example.bookstore.model.Order;
 import com.example.bookstore.model.OrderDetail;
 import com.example.bookstore.model.OrderDetailId;
 import com.example.bookstore.model.User;
+import com.example.bookstore.repository.BookRepository;
 import com.example.bookstore.repository.CartRepository;
 import com.example.bookstore.repository.OrderDetailRepository;
 import com.example.bookstore.repository.OrderRepository;
@@ -32,6 +35,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private CartRepository cartRepository;
+
+    @Autowired
+    private BookRepository bookRepository;
 
     @Override
     public List<Order> getOrdersByUser(UUID userID) {
@@ -62,6 +68,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public UUID placeOrder(RecipientDto recipientDto, UserDto userDto) {
         List<Cart> carts = cartRepository.findByUser(User.builder().id(userDto.getId()).build());
         // check cart info
@@ -74,6 +81,9 @@ public class OrderServiceImpl implements OrderService {
         float totalAmount = 0;
         for (Cart item : carts) {
             totalAmount += item.getQuantity() * item.getBook().getPrice();
+            Book book = item.getBook();
+            book.setStockQuantity(book.getStockQuantity() - item.getQuantity());
+            bookRepository.save(book);
         }
         totalAmount = (float) Math.round(totalAmount * 100) / 100;
 
@@ -110,8 +120,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> getOrdersByDeliveryStatus(String status) {
-        return orderRepository.findByDeliveryStatus(status);
+    public List<Order> getPayedOrders() {
+        return orderRepository.findByDeliveryStatusNotIn("Pending", "Cancel");
     }
 
     @Override
@@ -154,6 +164,26 @@ public class OrderServiceImpl implements OrderService {
             earnings.add(sum);
         }
         return earnings;
+    }
+
+    @Override
+    public List<Order> getAllOrders() {
+        return orderRepository.findAll();
+    }
+
+    @Override
+    public void updateDeliveryStatus(UUID id, String newStatus) {
+        Order order = orderRepository.findById(id)
+            .orElseThrow(() -> new CustomException(404, "Order not found"));
+        if(newStatus.equals("Processing") 
+            || newStatus.equals("Shipping") 
+            || newStatus.equals("Shipped") 
+            || newStatus.equals("Cancel")) {
+                order.setDeliveryStatus(newStatus);
+                orderRepository.save(order);
+                return;
+        }
+        throw new CustomException(400, "Invalid delivery status");
     }
 
 }

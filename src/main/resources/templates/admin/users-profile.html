@@ -93,8 +93,8 @@
 
                                         <div class="form-floating col-6 col-lg-3 mb-3">
                                             <select name="status" id="status" class="form-select">
-                                                <option value="active" th:selected="${#strings.equals(user.status, 'active')}">Active</option>
-                                                <option value="block" th:selected="${#strings.equals(user.status, 'inactive')}">Blocked</option>
+                                                <option value="active" th:selected="${user.status == 'active'}">Active</option>
+                                                <option value="block" th:selected="${user.status == 'inactive'}">Blocked</option>
                                             </select>
                                             <label class="ms-2" for="status">Status</label>
                                         </div>
@@ -117,11 +117,7 @@
             <div th:replace="~{fragments/footer :: footer}"></div>
         </div>
 
-
-
     </main>
-
-
 
     <script>
         $(() => {
@@ -130,8 +126,6 @@
             if (datatablesSimple) {
                 new simpleDatatables.DataTable(datatablesSimple);
             }
-
-
         });
     </script>
 

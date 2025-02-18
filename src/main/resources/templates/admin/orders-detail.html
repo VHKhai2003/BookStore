@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en" th:data-bs-theme="${session.darkmode != null and session.darkmode ? 'dark' : 'light'}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <th:block th:replace="~{fragments/cdn :: main-cdn}"></th:block>
+    <th:block th:replace="~{fragments/cdn :: datatable}"></th:block>
+    <title>BookStore</title>
+
+    <style>
+        .one-line-ellipsis {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 1; /* Number of lines to show */
+            -webkit-box-orient: vertical;
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="d-flex flex-nowrap h-100">
+        <div th:replace="~{admin/fragments/sidebar :: sidebar}"></div>
+
+        <div id="content" class="w-100 h-100">
+            <div th:replace="~{admin/fragments/header :: header}"></div>
+
+            <div class="bg-body-secondary p-3">
+                <div class="container">
+                    <!-- Change the content of page here -->
+                    <div class="row justify-content-center">
+                        <div class="col-12">
+                            <div class="card shadow border-0">
+                                <div class="card-header text-bg-dark py-3">
+                                    <div class="row px-4 align-items-center">
+                                        <div class="col-6 ps-0">
+                                            <h4 class="pt-2 text-white text-uppercase">
+                                                Order Summary
+                                            </h4>
+                                        </div>
+                                        <div class="col-6 pe-0 text-end">
+                                            <a class="btn btn-outline-danger btn-sm py-2 text-uppercase"
+                                                th:href="@{/admin/orders}">
+                                                Back to Orders
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="container rounded p-2">
+                                        <div class="row">
+                                            <form id="update-info-form"
+                                                class="col-12 col-lg-6 pb-4"
+                                                th:action="@{/admin/orders/{id}/detail(id=${order.id})}"
+                                                method="POST" >
+                                                <fieldset>
+                                                    <div class="row">
+                                                        <h4 class="d-flex justify-content-between align-items-center mb-3">
+                                                            <span class="text-info">Delivery Details:</span>
+                                                        </h4>
+                                                    </div>
+                                                    <div class="row my-1">
+                                                        <div class="col-3">
+                                                            <label class="fw-semibold">Fullname</label>
+                                                        </div>
+                                                        <div class="col-9">
+                                                            <input
+                                                                class="form-control"
+                                                                type="text"
+                                                                name="receiver"
+                                                                th:value="${order.receiver != null ? order.receiver : order.orderBy.name}"
+                                                                required
+                                                                readonly
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                    <div class="row my-1">
+                                                        <div class="col-3">
+                                                            <label class="fw-semibold">Phone</label>
+                                                        </div>
+                                                        <div class="col-9">
+                                                            <input
+                                                                class="form-control"
+                                                                type="text"
+                                                                name="phone_number"
+                                                                th:value="${order.phoneNumber}"
+                                                                required
+                                                                readonly
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                    <div class="row my-1">
+                                                        <div class="col-3">
+                                                            <label class="fw-semibold">Address</label>
+                                                        </div>
+                                                        <div class="col-9">
+                                                            <input
+                                                                class="form-control"
+                                                                type="text"
+                                                                id="delivery_address"
+                                                                name="delivery_address"
+                                                                th:value="${order.deliveryAddress}"
+                                                                required
+                                                                readonly
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                    <div class="row my-1">
+                                                        <div class="col-3">
+                                                            <label class="fw-semibold">Order date</label>
+                                                        </div>
+                                                        <div class="col-9">
+                                                            <input
+                                                                class="form-control"
+                                                                type="text"
+                                                                th:value="${order.orderDate}"
+                                                                readonly/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row my-1">
+                                                        <div class="col-3">
+                                                            <label class="fw-semibold text-nowrap">Shipping date</label>
+                                                        </div>
+                                                        <div class="col-9">
+                                                            <input
+                                                                class="form-control"
+                                                                type="text"
+                                                                th:value="${order.deliveryDate}"
+                                                                readonly />
+                                                        </div>
+                                                    </div>
+                                                </fieldset>
+
+                                                <button
+                                                    id="submit-update-info-btn"
+                                                    type="submit"
+                                                    class="btn btn-warning text-light fw-semibold w-100 mt-2">
+                                                    UPDATE ORDER DETAILS
+                                                </button>
+                                            </form>
+                                            <div class="col-12 col-lg-5 offset-lg-1">
+                                                <h4 class="d-flex justify-content-between align-items-center mb-3">
+                                                    <span class="text-info">Order Summary:</span>
+                                                </h4>
+                                                <button class="btn w-100 mb-2 text-uppercase" th:classappend="${order.deliveryStatus == 'Cancel' ? 'btn-outline-danger' : 'btn-outline-success'}"
+                                                    th:text="${'ORDER STATUS - ' + order.deliveryStatus}">
+                                                </button>
+                                                <ul class="list-group mb-3">
+                                                    
+                                                    <li th:each="orderDetail, iterStat : ${orderDetails}"
+                                                        class="list-group-item d-flex justify-content-between">
+                                                        <div class="flex-fill">
+                                                            <h6 class="my-0 one-line-ellipsis"
+                                                                th:text="${orderDetail.book.title}">
+                                                            </h6>
+                                                            <small class="text-muted d-block" th:text="${'Price: ' + orderDetail.price}">
+                                                            </small>
+                                                            <small class="text-muted d-block" th:text="${'Quantity: ' + orderDetail.quantity}">
+                                                            </small>
+                                                        </div>
+                                                    </li>
+                                                    
+
+                                                    <li class="list-group-item d-flex justify-content-between align-items-center bg-light py-3">
+                                                        <h4 class="text-success mb-0 text-uppercase">
+                                                            Total
+                                                        </h4>
+                                                        <h4 class="text-success mb-0" th:text="${order.totalAmount}"></h4>
+                                                    </li>
+                                                </ul>
+
+                                                <form
+                                                    id="change-status-form"
+                                                    th:action="@{/admin/orders/{id}/change-status(id=${order.id})}"
+                                                    method="POST">
+                                                    <input
+                                                        class="visually-hidden"
+                                                        type="text"
+                                                        id="delivery_status"
+                                                        name="deliveryStatus"
+                                                    />
+                                                    <button
+                                                        id="next-action-btn"
+                                                        class="btn btn-primary w-100 fw-semibold text-uppercase"
+                                                    ></button>
+                                                </form>
+
+                                                <form
+                                                    id="cancel-status-form"
+                                                    th:action="@{/admin/orders/{id}/change-status(id=${order.id})}"
+                                                    method="POST">
+                                                    <input
+                                                        class="visually-hidden"
+                                                        type="text"
+                                                        id="cancel_status"
+                                                        name="deliveryStatus"
+                                                    />
+                                                    <button
+                                                        id="cancel-action-btn"
+                                                        class="btn btn-danger w-100 fw-semibold mt-2">
+                                                        CANCEL ORDER
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div th:replace="~{fragments/footer :: footer}"></div>
+        </div>
+
+    </main>
+
+    <script th:inline="javascript">
+        $(() => {
+            const order = /*[[${[order]}]]*/ '';
+            const delivery_status = order.deliveryStatus;
+            console.log(delivery_status)
+            let nextAction = '';
+            let nextStatus = '';
+            if (delivery_status == 'Payed') {
+                nextAction = 'Process';
+                nextStatus = 'Processing';
+            } else if (delivery_status == 'Processing') {
+                nextAction = 'Ship';
+                nextStatus = 'Shipping';
+            } else if (delivery_status == 'Shipping') {
+                nextAction = 'Complete';
+                nextStatus = 'Shipped';
+            } else {
+                $('#next-action-btn').remove();
+            }
+
+            if (
+                delivery_status == 'Pending' ||
+                delivery_status == 'Shipping' ||
+                delivery_status == 'Shipped' ||
+                delivery_status == 'Cancel'
+            ) {
+                $('#cancel-action-btn').remove();
+                $('#submit-update-info-btn').attr('disabled', true);
+                $('#update-info-form fieldset').prop('disabled', true);
+                $('#update-info-form').submit((e) => {
+                    e.preventDefault();
+                });
+            }
+
+            $('#next-action-btn').text(`${nextAction} order`);
+
+            $('#change-status-form').submit((e) => {
+                $('#delivery_status').val(nextStatus);
+            });
+
+            $('#cancel-status-form').submit((e) => {
+                $('#cancel_status').val('Cancel');
+            });
+        });
+    </script>
+
+</body>
+
+</html>

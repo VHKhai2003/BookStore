@@ -91,6 +91,9 @@
         }
 
         function handleSubmit(fullName, email, phone) {
+            console.log(emailValidate(email))
+            console.log(fullName(fullName))
+            console.log(phone(phone))
             if (!fullnameValidate(fullName) || !emailValidate(email) || !phoneValidate(phone)) {
                 return false;
             }
@@ -185,6 +188,7 @@
                 const fullName = $('#name').val();
                 const email = $('#email').val();
                 const phone = $('#phone_number').val();
+                console.log(fullName, email, phone);
                 if (!handleSubmit(fullName, email, phone)) {
                     e.preventDefault();
                     toastr.options.timeOut = 3000;

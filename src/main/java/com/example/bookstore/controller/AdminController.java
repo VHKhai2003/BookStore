@@ -15,12 +15,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.example.bookstore.dto.BookDto;
 import com.example.bookstore.model.Genre;
 import com.example.bookstore.model.Order;
+import com.example.bookstore.model.OrderDetail;
 import com.example.bookstore.service.BookService;
 import com.example.bookstore.service.GenreService;
 import com.example.bookstore.service.OrderService;
 import com.example.bookstore.service.UserService;
 
 import jakarta.servlet.http.HttpSession;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 @Controller
 @RequestMapping("/admin")
@@ -40,8 +43,8 @@ public class AdminController {
 
     @GetMapping({ "", "/dashboard" })
     public String getDashBoard(Model model) {
-        // get list of shipped orders
-        List<Order> orders = orderService.getOrdersByDeliveryStatus("Shipped");
+        // get list of payed orders
+        List<Order> orders = orderService.getPayedOrders();
         // calculate sale figures
         model.addAttribute("earningCurrentYear", orderService.getEarningCurrentYear(orders));
         model.addAttribute("earningCurrentMonth", orderService.getEarningCurrentMonth(orders));
@@ -143,6 +146,27 @@ public class AdminController {
         model.addAttribute("user", userService.getUserById(id));
         return "/admin/users-profile";
     }
-    
 
+    @GetMapping("/orders")
+    public String getAllOrders(Model model) {
+        model.addAttribute("currentPage", "orders");
+        model.addAttribute("orders", orderService.getAllOrders());
+        return "/admin/orders";
+    }
+
+    @GetMapping("/orders/{id}/detail")
+    public String getOrderDetail(@PathVariable UUID id, Model model) {
+        List<OrderDetail> orderDetails = orderService.getDetailsOfOrder(id);
+        model.addAttribute("currentPage", "orders");
+        model.addAttribute("orderDetails", orderDetails);
+        model.addAttribute("order", orderDetails.get(0).getOrder());
+        return "/admin/orders-detail";
+    }
+     
+    @PostMapping("/orders/{id}/change-status")
+    public String postMethodName(@PathVariable UUID id, String deliveryStatus) {
+        orderService.updateDeliveryStatus(id, deliveryStatus);
+        return "redirect:/admin/orders/" + id +"/detail";
+    }
+    
 }

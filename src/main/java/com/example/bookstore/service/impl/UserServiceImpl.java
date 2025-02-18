@@ -92,6 +92,7 @@ public class UserServiceImpl implements UserService {
                 Path path = Paths.get(staticPath, user.getAvatar()).toAbsolutePath();
                 Files.write(path, avatar.getBytes());
             } catch (IOException e) {
+                System.err.println(e);
                 throw new CustomException(500, "Cannot update image");
             }
         }

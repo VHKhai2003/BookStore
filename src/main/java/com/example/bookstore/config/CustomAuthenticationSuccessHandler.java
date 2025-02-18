@@ -1,7 +1,6 @@
 package com.example.bookstore.config;
 
 import java.io.IOException;
-import java.security.Principal;
 import java.util.Collection;
 
 import org.springframework.security.core.Authentication;

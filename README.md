@@ -6,6 +6,15 @@ The **BookStore** Web Application is a web-based platform that allows users to b
 It is built using **Spring Boot** with Thymeleaf for templating and **Spring Security** for authentication and authorization. 
 The application uses **PostgreSQL** as its database.
 
+## 🌍 URL
+- **Production:** [https://my-bookstore-5def.onrender.com](https://my-bookstore-5def.onrender.com)
+- **Accounts:** 
+  
+  | Role  |   | Username     | Password     |
+  |-------|---|--------------|--------------|
+  | user  |   | duykhiem123  | Khiem@123456 |
+  | admin |   | huynhkhai123 | Khai@123456  |
+
 ## ✨ Features
 
 - **🔐 User Authentication & Authorization**
@@ -85,4 +94,5 @@ If you would like to contribute, feel free to fork the repository and submit a p
 For questions or support:
 
 -   **Email**: vuonghuynhkhai4869@gmail.com
+
 

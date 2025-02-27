@@ -99,8 +99,8 @@ INSERT INTO ROLES VALUES
 
 
 INSERT INTO USERS VALUES
-('1e24734f-33d0-4923-bf6f-e8a18b918b2d', 'Tạ Ngọc Duy Khiêm', 'duykhiem123', 'Khiem@123456', 'duykhiem@gmail.com', '142 Võ Văn Ngân, Quận Thủ Đức, Thành Phố Hồ Chí Minh, Việt Nam', '/images/users/avatars/1e24734f-33d0-4923-bf6f-e8a18b918b2d.png', 2, '2019-05-05', '1111111111', '0900000001'),
-('96513127-7ffd-41eb-8fdd-2bc31e047688', 'Vương Huỳnh Khải', 'huynhkhai123','Khai@123456', 'huynhkhai@gmail.com', '50 Bạch Đằng, Quận Bình Thạnh, Thành Phố Hồ Chí Minh, Việt Nam', '/images/users/avatars/96513127-7ffd-41eb-8fdd-2bc31e047688.jpg', 1, '2020-02-20', '2222222222', '0900000002'),
+('1e24734f-33d0-4923-bf6f-e8a18b918b2d', 'Tạ Ngọc Duy Khiêm', 'duykhiem123', 'Khiem@123456', 'duykhiem@gmail.com', '142 Võ Văn Ngân, Quận Thủ Đức, Thành Phố Hồ Chí Minh, Việt Nam', '/images/users/avatars/1e24734f-33d0-4923-bf6f-e8a18b918b2d.png', 1, '2019-05-05', '1111111111', '0900000001'),
+('96513127-7ffd-41eb-8fdd-2bc31e047688', 'Vương Huỳnh Khải', 'huynhkhai123','Khai@123456', 'huynhkhai@gmail.com', '50 Bạch Đằng, Quận Bình Thạnh, Thành Phố Hồ Chí Minh, Việt Nam', '/images/users/avatars/96513127-7ffd-41eb-8fdd-2bc31e047688.jpg', 2, '2020-02-20', '2222222222', '0900000002'),
 ('8bd9d2df-98ac-4b54-8ccf-5f12d25435ee', 'Trần Mỹ Phú Lâm', 'phulam123', 'Lam@123456', 'phulam@gmail.com', '242 Nguyễn Văn Cừ, Quận 5, Thành Phố Hồ Chí Minh, Việt Nam', '/images/users/avatars/8bd9d2df-98ac-4b54-8ccf-5f12d25435ee.png', 1, '2019-08-16', '3333333333', '0900000003'),
 ('2f06bfaf-9946-41e0-8021-34a91f64ee3d', 'Nguyễn Võ Nhật Huy', 'nhathuy123', 'Huy@123456', 'nhathuy@gmail.com', '142 Kha Vạn Cân, Quận Thủ Đức, Thành Phố Hồ Chí Minh, Việt Nam', '/images/users/avatars/2f06bfaf-9946-41e0-8021-34a91f64ee3d.png', 1, '2020-08-18', '4444444444', '0900000004'),
 ('5b5d2d7a-3a61-4efc-aeef-2199a76c1fa7', 'Nguyễn Hưng Yên', 'hungyen123', 'Yen@123456', 'hungyen@gmail.com', '321 Man Thiện, Quận Thủ Đức, Thành Phố Hồ Chí Minh, Việt Nam', '/images/users/avatars/5b5d2d7a-3a61-4efc-aeef-2199a76c1fa7.png', 1, '2021-01-02', '5555555555', '0900000005'),

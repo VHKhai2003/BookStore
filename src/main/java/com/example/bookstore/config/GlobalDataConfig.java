@@ -39,6 +39,7 @@ public class GlobalDataConfig {
 	public UserDto getAuthenticatedUserInfo(Authentication authentication) {
 		UserDto userInfo = null;
 		if (authentication != null && authentication.isAuthenticated()) {
+			System.out.println(authentication);
 			userInfo = userService.getUserInfoByUsername(authentication.getName());
 		}
 		return userInfo;

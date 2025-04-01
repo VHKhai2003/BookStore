@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,19 +25,13 @@ import com.example.bookstore.repository.OrderRepository;
 import com.example.bookstore.service.OrderService;
 
 @Service
+@RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
 
-    @Autowired
-    private OrderRepository orderRepository;
-
-    @Autowired
-    private OrderDetailRepository orderDetailRepository;
-
-    @Autowired
-    private CartRepository cartRepository;
-
-    @Autowired
-    private BookRepository bookRepository;
+    private final OrderRepository orderRepository;
+    private final OrderDetailRepository orderDetailRepository;
+    private final CartRepository cartRepository;
+    private final BookRepository bookRepository;
 
     @Override
     public List<Order> getOrdersByUser(UUID userID) {

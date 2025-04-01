@@ -1,6 +1,7 @@
 package com.example.bookstore.model;
 
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,6 +16,7 @@ import java.util.Map;
 @AllArgsConstructor
 @Builder
 @ToString
+@Slf4j
 public class UserPrincipal implements UserDetails, OAuth2User {
     private String username;
     private String password;
@@ -29,6 +31,9 @@ public class UserPrincipal implements UserDetails, OAuth2User {
     public static UserPrincipal createFrom(User user){
         List<SimpleGrantedAuthority> userAuthorities
                 = List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().getName()));
+        log.info("Login information: username={}, authorities={}",
+                user.getUsername(), userAuthorities);
+
         return UserPrincipal.builder()
                 .username(user.getUsername())
                 .password(user.getPassword())

@@ -1,7 +1,7 @@
 package com.example.bookstore.service.impl;
 
 import com.example.bookstore.model.UserPrincipal;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,10 +12,10 @@ import com.example.bookstore.model.User;
 import com.example.bookstore.repository.UserRepository;
 
 @Service
+@RequiredArgsConstructor
 public class UserDetailServiceImpl implements UserDetailsService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     // this method run when user login
     @Override
@@ -25,7 +25,6 @@ public class UserDetailServiceImpl implements UserDetailsService {
         if(!user.getStatus().equalsIgnoreCase("active")) {
             throw new DisabledException("User was blocked");
         }
-        System.out.println(user.getUsername() + " ---  " + user.getRole().getName());
         return UserPrincipal.createFrom(user);
     }
 

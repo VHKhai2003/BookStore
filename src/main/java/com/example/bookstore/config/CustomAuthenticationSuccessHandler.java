@@ -21,7 +21,6 @@ public class CustomAuthenticationSuccessHandler extends SavedRequestAwareAuthent
             Authentication authentication) throws IOException, ServletException {
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 
-        System.out.println("Authorities: " + authorities);
         for (GrantedAuthority authority : authorities) {
             if (authority.getAuthority().equals("ROLE_Admin")) {
                 response.sendRedirect("/admin");

@@ -2,7 +2,7 @@ package com.example.bookstore.controller;
 
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,13 +19,11 @@ import com.example.bookstore.service.CartService;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
+@RequiredArgsConstructor
 public class BookController {
 
-    @Autowired
-    private BookService bookService;
-
-    @Autowired
-    private CartService cartService;
+    private final BookService bookService;
+    private final CartService cartService;
 
     @GetMapping("/")
     public String getHomePage(Model model, @RequestParam(defaultValue = "") String keyword,

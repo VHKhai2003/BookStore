@@ -3,7 +3,7 @@ package com.example.bookstore.controller;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,19 +26,13 @@ import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/admin")
+@RequiredArgsConstructor
 public class AdminController {
 
-    @Autowired
-    private BookService bookService;
-
-    @Autowired
-    private OrderService orderService;
-
-    @Autowired
-    private GenreService genreService;
-
-    @Autowired
-    private UserService userService;
+    private final BookService bookService;
+    private final OrderService orderService;
+    private final GenreService genreService;
+    private final UserService userService;
 
     @GetMapping({ "", "/dashboard" })
     public String getDashBoard(Model model) {

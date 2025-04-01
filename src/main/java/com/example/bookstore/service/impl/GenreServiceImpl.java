@@ -3,7 +3,7 @@ package com.example.bookstore.service.impl;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import com.example.bookstore.exception.CustomException;
@@ -12,10 +12,10 @@ import com.example.bookstore.repository.GenreRepository;
 import com.example.bookstore.service.GenreService;
 
 @Service
+@RequiredArgsConstructor
 public class GenreServiceImpl implements GenreService {
 
-	@Autowired
-	private GenreRepository genreRepository;
+	private final GenreRepository genreRepository;
 
 	@Override
 	public List<Genre> getListGenres() {

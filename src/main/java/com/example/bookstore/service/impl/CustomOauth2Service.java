@@ -25,7 +25,6 @@ public class CustomOauth2Service extends DefaultOAuth2UserService {
         // Get the user information from provider (google)
         OAuth2User oauth2User = super.loadUser(userRequest);
         Map<String, Object> attributes = oauth2User.getAttributes();
-//        System.out.println("Attribute when login with google: " + attributes);
 
         String email = (String) attributes.get("email");
         String name = (String) attributes.get("name");
@@ -36,8 +35,7 @@ public class CustomOauth2Service extends DefaultOAuth2UserService {
         Optional<User> userOptional = userRepository.findByEmail(email);
         User user = null;
         if(userOptional.isPresent()){
-            // existed user
-            // update user information here if there are any changes
+            // user existed, update user information here if there are any changes
             user = userOptional.get();
         } else {
             user = User.builder()

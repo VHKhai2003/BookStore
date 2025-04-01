@@ -3,16 +3,21 @@ package com.example.bookstore.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
+
+
+//The SecurityFilterChain bean will automatically configure the necessary security settings.
 
 @Configuration
+@EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true)
 //@SuppressWarnings({ "deprecation", "removal" })
 public class SecurityConfig {
 
@@ -26,7 +31,9 @@ public class SecurityConfig {
             "/", "/book/**", "/auth/login", "/auth/register", "/utils/**"};
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http,
+                                                   AccessDeniedHandler accessDeniedHandler,
+                                                   AuthenticationEntryPoint authenticationEntryPoint) throws Exception {
         http.authorizeRequests(auth -> auth
                 .requestMatchers(publicUrls).permitAll()
                 .requestMatchers("/admin/**").hasRole("Admin")
@@ -41,7 +48,10 @@ public class SecurityConfig {
                 .logout(logout -> logout
                         .logoutUrl("/auth/logout")
                         .logoutSuccessUrl("/")
-                        .permitAll());
+                        .permitAll())
+                .exceptionHandling(exHandler -> exHandler
+                        .accessDeniedHandler(accessDeniedHandler)
+                        .authenticationEntryPoint(authenticationEntryPoint));
         return http.build();
     }
 

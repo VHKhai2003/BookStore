@@ -2,7 +2,8 @@ package com.example.bookstore.config;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -18,20 +19,17 @@ import com.example.bookstore.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 
 @ControllerAdvice
+@RequiredArgsConstructor
+@Slf4j
 public class GlobalDataConfig {
 
-	@Autowired
-	private GenreService genreService;
-
-	@Autowired
-	private UserService userService;
-
-	@Autowired
-	private CartService cartService;
+	private final GenreService genreService;
+	private final UserService userService;
+	private final CartService cartService;
 
 	@ModelAttribute("genres")
 	public List<Genre> getListGenres(HttpServletRequest request) {
-		System.out.println("controller advice ---- " + request.getRequestURL());
+		log.info("Request coming: {}", request.getRequestURL());
 		return genreService.getListGenres();
 	}
 
@@ -39,7 +37,6 @@ public class GlobalDataConfig {
 	public UserDto getAuthenticatedUserInfo(Authentication authentication) {
 		UserDto userInfo = null;
 		if (authentication != null && authentication.isAuthenticated()) {
-			System.out.println(authentication);
 			userInfo = userService.getUserInfoByUsername(authentication.getName());
 		}
 		return userInfo;
@@ -50,7 +47,6 @@ public class GlobalDataConfig {
 		
 //		the number of admins is small, so don't need to check
 		if(!request.getRequestURI().startsWith("/admin")) {
-			
 			UserDto userInfo = (UserDto) model.getAttribute("loginUser");
 			if (userInfo != null) {
 				List<CartDto> carts = cartService.getCartOfUser(userInfo.getId());

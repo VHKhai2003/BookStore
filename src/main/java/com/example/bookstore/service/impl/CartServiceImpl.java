@@ -3,7 +3,7 @@ package com.example.bookstore.service.impl;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import com.example.bookstore.dto.CartAddingDto;
@@ -19,13 +19,11 @@ import com.example.bookstore.repository.CartRepository;
 import com.example.bookstore.service.CartService;
 
 @Service
+@RequiredArgsConstructor
 public class CartServiceImpl implements CartService {
 
-    @Autowired
-    private CartRepository cartRepository;
-
-    @Autowired
-    private BookRepository bookRepository;
+    private final CartRepository cartRepository;
+    private final BookRepository bookRepository;
 
     @Override
     public CartDto getCartOfUserAndBook(UUID userId, UUID bookId) {

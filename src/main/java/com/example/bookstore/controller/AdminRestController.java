@@ -1,5 +1,6 @@
 package com.example.bookstore.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -7,17 +8,16 @@ import com.example.bookstore.service.UserService;
 
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 
 @RestController
 @RequestMapping("/admin")
+@RequiredArgsConstructor
 public class AdminRestController {
 
-    @Autowired
-    UserService userService;
+    private final UserService userService;
 
     @GetMapping("/users/{id}/block")
     public Boolean blockUser(@PathVariable UUID id) {
